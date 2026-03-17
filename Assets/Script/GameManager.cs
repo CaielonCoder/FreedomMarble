@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private UIDocument HUD;
+    [SerializeField]
+    private MarbleMovementController marble;
 
     private VisualElement _rootVE;
     private Label _timeLabel;

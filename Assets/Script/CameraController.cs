@@ -10,7 +10,7 @@ public class CameraController : MonoBehaviour
     private Vector3 direction;
 
     [SerializeField]
-    private MarbelMovementController marbleController;
+    private MarbleMovementController marbleController;
 
     private enum State
     {

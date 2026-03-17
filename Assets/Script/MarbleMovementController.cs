@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MarbelMovementController : MonoBehaviour
+public class MarbleMovementController : MonoBehaviour
 {
     public delegate void FallOutsideHandler();
     public event FallOutsideHandler FallOutside;
