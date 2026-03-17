@@ -1,0 +1,14 @@
+:root {
+}
+
+.unity-text-element {
+    color: rgb(29, 14, 180);
+    font-size: 40px;
+    -unity-font-definition: url("project://database/Assets/UI/Boxy-Bold.ttf?fileID=12800000&guid=1ef4ad489e2e36749bf4c4e68f068b22&type=3#Boxy-Bold");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    letter-spacing: 10px;
+}
+
+.panel {
+    background-color: rgb(132, 132, 132);
+}

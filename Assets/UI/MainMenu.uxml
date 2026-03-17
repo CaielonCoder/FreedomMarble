@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=9014446ea3ed86044be963033d0a9f06&amp;type=3#MainMenu"/>
+    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; align-content: auto; justify-content: center;">
+        <ui:VisualElement name="Container" class="menu" style="width: 30%; height: 40%; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); background-color: rgba(4, 62, 84, 0);">
+            <ui:Button text="Play" name="Play"/>
+            <ui:Button text="Quit" name="Quit"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
