@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/LevelComplete.uss?fileID=7433441132597879392&amp;guid=cf84268ab5c64d3409075bf35228ef2a&amp;type=3#LevelComplete"/>
+    <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; align-content: auto; justify-content: center;">
+        <ui:VisualElement name="Panel" class="menu" style="width: 100%; height: 40%; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); align-self: center; align-content: center; justify-content: center;">
+            <ui:Label text="LEVEL COMPLETE" name="LevelCompleteText" style="align-self: center; margin-top: 20px; font-size: 70px;"/>
+            <ui:Label text="GOAL REACHED BONUS" name="BonusType" style="align-self: center; margin-top: 20px;"/>
+            <ui:Label text="74625" name="Score" style="align-self: center; margin-top: 20px; font-size: 100px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -9,6 +9,6 @@
     letter-spacing: 10px;
 }
 
-.panel {
-    background-color: rgba(132, 132, 132, 0.82);
+.menu {
+    background-color: rgba(191, 191, 191, 0.69);
 }

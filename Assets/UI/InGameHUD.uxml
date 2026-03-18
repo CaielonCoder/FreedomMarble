@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/InGameHUD.uss?fileID=7433441132597879392&amp;guid=cde2d6c8d5670d24cba4544b9763bfa0&amp;type=3#InGameHUD"/>
     <ui:VisualElement name="Container" style="flex-grow: 1; flex-basis: auto; align-items: stretch;">
-        <ui:VisualElement name="ScoreContainer" class="panel" style="background-color: rgb(132, 132, 132); flex-basis: auto; flex-grow: 0; flex-shrink: 1; width: 15%; margin-top: 14px; margin-right: 14px; margin-bottom: 14px; margin-left: 14px;">
+        <ui:VisualElement name="ScoreContainer" class="panel" style="flex-basis: auto; flex-grow: 0; flex-shrink: 1; width: 15%; margin-top: 14px; margin-right: 14px; margin-bottom: 14px; margin-left: 14px;">
             <ui:Label text="SCORE" name="ScoreText"/>
             <ui:Label text="653212" name="Score"/>
         </ui:VisualElement>
