@@ -12,12 +12,23 @@ Shader "Custom/Marble"
 
         Pass
         {
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
             HLSLPROGRAM
 
             #pragma vertex vert
             #pragma fragment frag
 
+			#pragma shader_feature_local_fragment _ENVIRONMENTREFLECTIONS_OFF	
+			#pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _REFLECTION_PROBE_BLENDING
+            #pragma multi_compile_fragment _ _REFLECTION_PROBE_BOX_PROJECTION
+            #pragma multi_compile_fragment _ _REFLECTION_PROBE_ATLAS
+
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             struct Attributes
             {
@@ -31,7 +42,10 @@ Shader "Custom/Marble"
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float2 screenPos : TEXCOORD1;
-                float3 viewNormal : NORMAL0;
+                float3 viewDirWS : TEXCOORD2;
+                float3 normalWS : NORMAL0;
+                float3 positionWS : TEXCOORD3;
+                float3 viewNormal : NORMAL1;
             };
 
             TEXTURE2D(_BaseMap);
@@ -51,11 +65,13 @@ Shader "Custom/Marble"
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 OUT.screenPos = OUT.positionHCS.xy / OUT.positionHCS.w;
-                OUT.screenPos = float2((OUT.screenPos.x + 1.0) / 2.0, (OUT.screenPos.y + 1.0) / 2.0);//(OUT.screenPos.y - 1.0) / 2.0);
+                OUT.screenPos = float2((OUT.screenPos.x + 1.0) / 2.0, (OUT.screenPos.y + 1.0) / 2.0);
 
-				float3 worldNormal = TransformObjectToWorldDir(IN.normalOS);
-                OUT.viewNormal = mul((float3x3)UNITY_MATRIX_V, worldNormal);
-                //OUT.screenPos = GetNormalizedScreenSpaceUV(GetVertexPositionInputs(IN.positionOS).positionCS.xy);
+                OUT.normalWS = GetVertexNormalInputs(IN.normalOS).normalWS;
+                OUT.positionWS = GetVertexPositionInputs(IN.positionOS).positionWS;
+                OUT.viewDirWS = GetWorldSpaceNormalizeViewDir(OUT.positionWS);
+
+                OUT.viewNormal = mul((float3x3)UNITY_MATRIX_V, OUT.normalWS);
                 return OUT;
             }
 
@@ -64,10 +80,15 @@ Shader "Custom/Marble"
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
                 float2 uv = float2(IN.screenPos.x, 1.0 - IN.screenPos.y) - IN.viewNormal.xy * (1-IN.viewNormal.z) * 0.025;
                 half4 screenColor = tex2D(_CameraOpaqueTexture, uv);
-                //return float4(0, 0, IN.viewNormal.z, 1.0);
-                //return float4(IN.viewNormal.xy, IN.viewNormal.z, 1.0);
-                float fresnelFactor = IN.viewNormal.z * 0.9;
-                return color * (1 - fresnelFactor) + screenColor * fresnelFactor;
+
+				float3 reflectVector = reflect(-IN.viewDirWS, IN.normalWS);
+                half3 reflection = GlossyEnvironmentReflection(reflectVector, IN.positionWS, 0.1, 1.0, GetNormalizedScreenSpaceUV(IN.positionHCS.xy));
+
+                float fresnelFactor = IN.viewNormal.z * 0.5;
+                float invFresnel =  1 - fresnelFactor;
+                color.rgb = color.rgb * clamp(invFresnel, 0.5, 1) + reflection * 2 * invFresnel + screenColor.rgb * fresnelFactor;
+                color.a = 1;
+                return color;
             }
             ENDHLSL
         }

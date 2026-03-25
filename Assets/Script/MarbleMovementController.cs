@@ -15,7 +15,14 @@ public class MarbleMovementController : MonoBehaviour
     private InputActionAsset marbleInputActionAsset;
 
     [SerializeField]
-    private float moveForce;
+    private float _noInputForce;
+    [SerializeField]
+    private float _moveForceMultiplier;
+    // Speed vs Force curve
+    [SerializeField]
+    private AnimationCurve _accelerationCurve;
+    [SerializeField]
+    private float _maxSpeed;
 
     [SerializeField]
     private Transform playerCamera;
@@ -54,8 +61,16 @@ public class MarbleMovementController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
-        Vector3 forceDirection = playerCamera.forward * moveValue.y + playerCamera.right * moveValue.x;
-        rigidbody.AddForce(forceDirection * moveForce);
+        if (moveValue.magnitude < 0.1)
+        {
+            rigidbody.AddForce(-rigidbody.linearVelocity * _noInputForce);
+        }
+        else
+        {
+            Vector3 moveDirection = playerCamera.forward * moveValue.y + playerCamera.right * moveValue.x;
+            float speedFactor = (moveDirection * _maxSpeed - rigidbody.linearVelocity).magnitude / _maxSpeed;
+            rigidbody.AddForce(moveDirection * _accelerationCurve.Evaluate(speedFactor) * _moveForceMultiplier);
+        }
     }
 
     protected void OnTriggerEnter(Collider other)
