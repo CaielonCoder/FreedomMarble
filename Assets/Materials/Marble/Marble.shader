@@ -52,7 +52,6 @@ Shader "Custom/Marble"
             SAMPLER(sampler_BaseMap);
 
             sampler2D _CameraOpaqueTexture;
-            sampler2D _CameraNormalsTexture;
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _BaseColor;
