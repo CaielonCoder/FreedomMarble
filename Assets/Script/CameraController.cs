@@ -31,13 +31,19 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (state == State.Following)
+        {
+            UpdateCameraPosition();
+        }
+    }
+
+    public void UpdateCameraPosition()
+    {
 #if UNITY_EDITOR
         direction.Normalize();
         direction.y = Mathf.Sin(Mathf.Deg2Rad * angle);
         direction.Normalize();
 #endif
-        if (state == State.Following)
-        {
             Vector3 moveDirection = direction;
             moveDirection.y = 0;
             moveDirection.Normalize();
@@ -45,7 +51,6 @@ public class CameraController : MonoBehaviour
             position.y = marbleController.transform.position.y;
             transform.position = position + direction * distance;
             transform.forward = -direction;
-        }
     }
 
     protected void OnMarbleFallOutside()
