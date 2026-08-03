@@ -48,6 +48,7 @@
     margin-top: 30px;
     height: 120px;
     margin-bottom: 30px;
+    -unity-material: url("");
 }
 
 .unity-button:hover {
@@ -75,4 +76,32 @@
     margin-top: 30px;
     height: 120px;
     margin-bottom: 30px;
+}
+
+.selector-button {
+    background-color: rgba(0, 0, 0, 0.32);
+    align-self: center;
+    width: 100%;
+    font-size: 60px;
+    -unity-font-style: normal;
+    text-shadow: 0 0 0 rgba(0, 24, 0, 0);
+    color: rgb(96, 148, 167);
+    border-left-color: rgb(85, 85, 85);
+    border-right-color: rgb(85, 85, 85);
+    border-top-color: rgb(85, 85, 85);
+    border-bottom-color: rgb(85, 85, 85);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    -unity-font-definition: url("project://database/Assets/Fonts/Orbitron-VariableFont_wght.ttf?fileID=12800000&guid=6b5dd868f85b9454ca113926882a9701&type=3#Orbitron-VariableFont_wght");
+    letter-spacing: 6px;
+    margin-top: 30px;
+    height: 120px;
+    margin-bottom: 30px;
+    -unity-material: url("");
 }
