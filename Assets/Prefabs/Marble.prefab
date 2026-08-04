@@ -109,7 +109,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7075764590617641856}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c86df944aac9f454dabf10205d5465d8, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -132,8 +132,8 @@ Rigidbody:
   m_GameObject: {fileID: 7075764590617641856}
   serializedVersion: 5
   m_Mass: 5
-  m_LinearDamping: 0
-  m_AngularDamping: 0.5
+  m_LinearDamping: 0.4
+  m_AngularDamping: 0.8
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -162,72 +162,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414bb2bcdc0a6b6499a2f84628ecce91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MarbelMovementController
-  marbleInputActionAsset: {fileID: -944628639613478452, guid: 5d49dc063a074fe438e7750f83c812bc, type: 3}
-  _noInputForce: 5
-  _moveForceMultiplier: 10
-  _accelerationCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 3.7279308
-      outSlope: 3.7279308
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.19363037
-      value: 0.7218406
-      inSlope: 1.2763357
-      outSlope: 1.2763357
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.10780487
-    - serializedVersion: 3
-      time: 0.65018433
-      value: 0.9499539
-      inSlope: 0.18500696
-      outSlope: 0.18500696
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.4228706
-    - serializedVersion: 3
-      time: 1
-      value: 1.0012264
-      inSlope: 0.108068
-      outSlope: 0.108068
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.3614289
-    - serializedVersion: 3
-      time: 1.1232262
-      value: 1.3266133
-      inSlope: 1.5455662
-      outSlope: 1.5455662
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.5018444
-      value: 1.4972057
-      inSlope: 0.118584655
-      outSlope: 0.118584655
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.42375317
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _maxSpeed: 2.2
-  playerCamera: {fileID: 0}
-  validPositionsGridSize: 0.666
+  _marbleInputActionAsset: {fileID: -944628639613478452, guid: 5d49dc063a074fe438e7750f83c812bc, type: 3}
+  _forceMultiplier: 0
+  _torqueMultiplier: 4
+  _maxSpeed: 2
+  _changeAngleMultiplier: 1.5
+  _playerCamera: {fileID: 0}
+  _validPositionsGridSize: 0.666
 --- !u!114 &3874476280149546678
 MonoBehaviour:
   m_ObjectHideFlags: 0

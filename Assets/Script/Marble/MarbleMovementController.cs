@@ -12,26 +12,22 @@ public class MarbleMovementController : MonoBehaviour
     public event RespawnHandler Respawn;
 
     [SerializeField]
-    private InputActionAsset marbleInputActionAsset;
+    private InputActionAsset _marbleInputActionAsset;
 
     [SerializeField]
-    private float _noInputForce;
+    private float _forceMultiplier;
     [SerializeField]
-    private float _moveForceMultiplier;
-    // Speed vs Force curve
-    [SerializeField]
-    private AnimationCurve _accelerationCurve;
+    private float _torqueMultiplier;
     [SerializeField]
     private float _maxSpeed;
-
     [SerializeField]
     private float _changeAngleMultiplier;
 
     [SerializeField]
-    private Transform playerCamera;
+    private Transform _playerCamera;
 
     [SerializeField]
-    private float validPositionsGridSize = 0.666f;
+    private float _validPositionsGridSize = 0.666f;
 
     private InputAction _moveAction;
     private Rigidbody _rigidbody;
@@ -49,9 +45,9 @@ public class MarbleMovementController : MonoBehaviour
 
     void Start()
     { 
-        marbleInputActionAsset.FindActionMap("Movement").Enable();
+        _marbleInputActionAsset.FindActionMap("Movement").Enable();
         _lastValidPosition = transform.position;
-        _moveAction = marbleInputActionAsset.FindAction("Move");
+        _moveAction = _marbleInputActionAsset.FindAction("Move");
         _rigidbody = GetComponent<Rigidbody>();
         levelLayerMask = LayerMask.GetMask("Level");
     }
@@ -64,13 +60,16 @@ public class MarbleMovementController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 moveValue = _moveAction.ReadValue<Vector2>();
-        Vector3 moveDirection = playerCamera.forward * moveValue.y + playerCamera.right * moveValue.x;
+        Vector3 moveDirection = _playerCamera.forward * moveValue.y + _playerCamera.right * moveValue.x;
+        moveDirection.y = 0;
+        moveDirection.Normalize();
         Vector3 clampedLinearVel = Vector3.ClampMagnitude(_rigidbody.linearVelocity, _maxSpeed);
         Vector3 changeDelta = moveDirection * _maxSpeed - clampedLinearVel;
         float angle = Vector3.Angle(changeDelta, _rigidbody.linearVelocity);
 
-        Vector3 forceDelta = moveDirection * _moveForceMultiplier * (1 + (angle / 360f) * _changeAngleMultiplier);
-        _rigidbody.AddForce(forceDelta);
+        Vector3 forceDelta = moveDirection * (1 + (angle / 360f) * _changeAngleMultiplier);
+        _rigidbody.AddForce(forceDelta * _forceMultiplier);
+        _rigidbody.AddTorque(Quaternion.Euler(0, 90f, 0) * forceDelta * _torqueMultiplier);
     }
 
     protected void OnTriggerEnter(Collider other)
@@ -87,14 +86,14 @@ public class MarbleMovementController : MonoBehaviour
     {
         bool checkPosition = false;
         Vector3 rayOrigin = _lastValidPosition;
-        if (Mathf.Abs(_lastValidPosition.x - transform.position.x) > validPositionsGridSize)
+        if (Mathf.Abs(_lastValidPosition.x - transform.position.x) > _validPositionsGridSize)
         {
-            rayOrigin += Vector3.right * validPositionsGridSize * Mathf.Sign(transform.position.x - _lastValidPosition.x);
+            rayOrigin += Vector3.right * _validPositionsGridSize * Mathf.Sign(transform.position.x - _lastValidPosition.x);
             checkPosition = true;
         }
-        if (Mathf.Abs(_lastValidPosition.z - transform.position.z) > validPositionsGridSize)
+        if (Mathf.Abs(_lastValidPosition.z - transform.position.z) > _validPositionsGridSize)
         {
-            rayOrigin += Vector3.forward * validPositionsGridSize * Mathf.Sign(transform.position.z - _lastValidPosition.z);
+            rayOrigin += Vector3.forward * _validPositionsGridSize * Mathf.Sign(transform.position.z - _lastValidPosition.z);
             checkPosition = true;
         }
         rayOrigin.y = transform.position.y;
@@ -119,12 +118,12 @@ public class MarbleMovementController : MonoBehaviour
     private void OnGUI()
     {
         Vector2 moveValue = _moveAction.ReadValue<Vector2>();
-        Vector3 moveDirection = playerCamera.forward * moveValue.y + playerCamera.right * moveValue.x;
+        Vector3 moveDirection = _playerCamera.forward * moveValue.y + _playerCamera.right * moveValue.x;
         Vector3 clampedLinearVel = Vector3.ClampMagnitude(_rigidbody.linearVelocity, _maxSpeed);
         Vector3 changeDelta = moveDirection * _maxSpeed - clampedLinearVel;
         float angle = Vector3.Angle(changeDelta, _rigidbody.linearVelocity);
 
-        Vector3 forceDelta = moveDirection * _moveForceMultiplier * (1 + (angle / 360f) * _changeAngleMultiplier);
+        Vector3 forceDelta = moveDirection * _forceMultiplier * (1 + (angle / 360f) * _changeAngleMultiplier);
         string boxStr = $"clamped lin vel {clampedLinearVel:0.00}\nchange delta {changeDelta:0.00}\n";
         boxStr += $"angle {angle:0.00}\nforce delta {forceDelta:0.00}";
         GUI.Box(new Rect(Screen.width - 200, 0, 200, 200), boxStr);
