@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
     private UIDocument _levelCompletePanel;
     [SerializeField]
     private UIDocument _levelStartPanel;
+    [SerializeField]
+    private UIDocument _timeOverPanel;
     [SerializeField]
     private Rigidbody _marble;
     [SerializeField]
@@ -28,7 +31,8 @@ public class GameManager : MonoBehaviour
     {
         Intro,
         Playing,
-        Outro
+        TimeOver,
+        Outro,
     };
     private LevelState _state = LevelState.Intro;
 
@@ -55,8 +59,11 @@ public class GameManager : MonoBehaviour
         if (_state == LevelState.Playing)
         {
             _time -= Time.deltaTime;
-            _timeLabel.text = _time.ToString("00.");
 
+            if (_time < 0)
+                StartCoroutine(TimeOverAnimation());
+
+            _timeLabel.text = _time.ToString("00.");
             _accumulatedVelocity += _marble.linearVelocity.magnitude;
         }
     }
@@ -101,6 +108,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine(UpdateScore());
     }
 
+    private IEnumerator TimeOverAnimation()
+    {
+        _time = 0;
+        _state = LevelState.TimeOver;
+        _timeOverPanel.gameObject.SetActive(true);
+        Label finalScore = _timeOverPanel.rootVisualElement.Q<Label>("Score");
+        finalScore.text = _score.ToString();
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene("MainMenu");
+    }
+
     private IEnumerator LevelCompleteAnimation()
     {
         Label finalScore = _levelCompletePanel.rootVisualElement.Q<Label>("Score");
@@ -142,5 +160,19 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         bonusType.text = $"SCORE";
+
+        GoToNextLevel();
+    }
+
+    private void GoToNextLevel()
+    {
+        string nextLevelName = "MainMenu";
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Practice":
+                nextLevelName = "Level1";                
+                break;
+        }
+        SceneManager.LoadScene(nextLevelName);
     }
 }
