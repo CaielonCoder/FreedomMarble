@@ -66,7 +66,7 @@ Shader "Custom/FailPlane"
                 half4 noise2 = SAMPLE_TEXTURE2D(_NoiseMap, sampler_NoiseMap, IN.uv + float2(-_Time.x * 0.4326774, _Time.x * 0.873542));
                 float colorFactor = clamp((noise1.r + noise2.g) * 1, 0, 1);
 
-                sceneColor = sceneColor * depthOcclusion + float3(0.02, 0.2, 0.02) * (1 - depthOcclusion);
+                sceneColor = sceneColor * depthOcclusion + _BaseColor * (1 - depthOcclusion);
                 float4 result = float4(0, 0, 0, 1) * (1 - colorFactor) + float4(sceneColor, 1.0) * colorFactor;
                 result.a = 1 - clamp((depthOcclusion - 0.8) * 5, 0, 1);
                 return result;
