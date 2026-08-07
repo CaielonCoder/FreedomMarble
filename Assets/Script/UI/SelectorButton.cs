@@ -45,11 +45,25 @@ public partial class SelectorButton : VisualElement
         _prev.clicked += OnPrevPressed;
 
         RegisterCallback<MouseMoveEvent>(MouseMoveEventHadler);
+        RegisterCallback<MouseLeaveEvent>(MouseLeaveEventHadler);
+        RegisterCallback<MouseEnterEvent>(MouseEnterEventHadler);
+    }
+
+    private void MouseEnterEventHadler(MouseEnterEvent evt)
+    {
+        _label.AddToClassList("selector-button-hover"); // mimic hover in label
+    }
+
+    private void MouseLeaveEventHadler(MouseLeaveEvent evt)
+    {
+        resolvedStyle.unityMaterial.material.SetFloat("_RuntimeOverPos", 0);
+        _label.RemoveFromClassList("selector-button-hover");
     }
 
     private void MouseMoveEventHadler(MouseMoveEvent evt)
     {
-        //Debug.Log($"Mouse local pos {evt.localMousePosition}");
+        float overPos = layout.width * 0.5f - evt.localMousePosition.x < 0 ? 1 : -1;
+        resolvedStyle.unityMaterial.material.SetFloat("_RuntimeOverPos", overPos);
     }
 
     private void OnNextPressed()

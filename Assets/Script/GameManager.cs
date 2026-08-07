@@ -159,7 +159,9 @@ public class GameManager : MonoBehaviour
         finalScore.text = _score.ToString();
 
         yield return new WaitForSeconds(0.5f);
-        bonusType.text = $"SCORE";
+        bonusType.text = $"FINAL SCORE";
+
+        yield return new WaitForSeconds(3f);
 
         GoToNextLevel();
     }

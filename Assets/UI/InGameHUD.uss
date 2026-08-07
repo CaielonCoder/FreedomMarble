@@ -4,11 +4,19 @@
 .unity-text-element {
     color: rgb(29, 14, 180);
     font-size: 40px;
-    -unity-font-definition: url("project://database/Assets/UI/Boxy-Bold.ttf?fileID=12800000&guid=1ef4ad489e2e36749bf4c4e68f068b22&type=3#Boxy-Bold");
+    -unity-font-definition: url("project://database/Assets/Fonts/Orbitron-VariableFont_wght.ttf?fileID=12800000&guid=6b5dd868f85b9454ca113926882a9701&type=3#Orbitron-VariableFont_wght");
     -unity-background-image-tint-color: rgb(255, 255, 255);
     letter-spacing: 10px;
+    justify-content: center;
+    -unity-text-align: middle-left;
 }
 
 .panel {
-    background-color: rgba(132, 132, 132, 0.82);
+    background-color: rgba(191, 191, 191, 0.69);
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 5px;
 }
