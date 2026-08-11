@@ -15198,50 +15198,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1896048263560938085, guid: 2d5c66af40c459e48898b8af2ba331ab, type: 3}
   m_PrefabInstance: {fileID: 2002777425}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2014969088
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2014969090}
-  - component: {fileID: 2014969089}
-  m_Layer: 0
-  m_Name: RefProvider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2014969089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014969088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c632b3a7d438bd74b8cbae8eab0dfac8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RefProvider
---- !u!4 &2014969090
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014969088}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.89563, y: -20.10214, z: -1.70314}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2017565985 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1896048263560938085, guid: 2d5c66af40c459e48898b8af2ba331ab, type: 3}
@@ -16088,7 +16044,7 @@ PrefabInstance:
       objectReference: {fileID: 330585546}
     - target: {fileID: 7075764590617641856, guid: 00fa4e8520ba4234da57a9edca98c9b4, type: 3}
       propertyPath: m_Name
-      value: Marbel
+      value: Marble
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17361,13 +17317,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2775202146192815967, guid: b87e2cff96834a748b35db73dd7b9501, type: 3}
+      propertyPath: m_Name
+      value: LevelUI
+      objectReference: {fileID: 0}
     - target: {fileID: 7598876875004812020, guid: b87e2cff96834a748b35db73dd7b9501, type: 3}
       propertyPath: m_Name
       value: LevelCore
-      objectReference: {fileID: 0}
-    - target: {fileID: 7598876875004812020, guid: b87e2cff96834a748b35db73dd7b9501, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8447544348264073871, guid: b87e2cff96834a748b35db73dd7b9501, type: 3}
       propertyPath: _goal
@@ -17554,5 +17510,4 @@ SceneRoots:
   - {fileID: 2462419535336552064}
   - {fileID: 1998994086}
   - {fileID: 1314724807}
-  - {fileID: 2014969090}
   - {fileID: 8251797066538623628}

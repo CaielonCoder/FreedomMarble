@@ -14,13 +14,10 @@ public class MainMenuUIController : MonoBehaviour
     private Button _quitButton;
     private SelectorButton _marbleSelector;
 
-    protected void Awake()
-    {
-        _rootVE = GetComponent<UIDocument>().rootVisualElement;
-    }
 
     protected void OnEnable()
     {
+        _rootVE = GetComponent<UIDocument>().rootVisualElement;
         _playButton = _rootVE.Query<Button>("Play");
         _playButton.clicked += OnPlayButtonClicked;
 
@@ -34,7 +31,7 @@ public class MainMenuUIController : MonoBehaviour
 
     private void OnPlayButtonClicked()
     {
-        SceneManager.LoadScene("Practice");
+        Provider.Instance.Resolve<GameStateManager>().StartGame();
     }
 
     private void OnQuitButtonClicked()
