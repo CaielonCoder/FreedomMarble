@@ -38,11 +38,7 @@ public class MainMenuUIController : MonoBehaviour
 
     private void OnQuitButtonClicked()
     {
-        InputActionMap map = InputSystem.actions.FindActionMap("Player");
-        if (map.enabled)
-            map.Disable();
-        else
-            map.Enable();
+        Application.Quit();
     }   
 
     private void OnNextMarblePressed()
