@@ -20,7 +20,7 @@ public class Provider : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 

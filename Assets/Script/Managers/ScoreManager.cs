@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public class ScoreManager : MonoBehaviour
         Score = 0;
         _gameStateManager = Provider.Instance.Resolve<GameStateManager>();
         _gameStateManager.LevelStateChanged += OnLevelStateChanged;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnLevelStateChanged(GameStateManager.LevelState state)
@@ -48,6 +55,14 @@ public class ScoreManager : MonoBehaviour
     {
         if (_accumulateVelocityActive)
             _accumulatedVelocity += _marbleRigidbody.linearVelocity.magnitude;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainMenu")
+        {
+            Score = 0;
+        }
     }
 
     private IEnumerator UpdateScore()

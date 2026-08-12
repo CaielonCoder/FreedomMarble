@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class MarbleMovementController : MonoBehaviour
 
     private InputAction _moveAction;
     private Rigidbody _rigidbody;
+    private float _initialLinearDamping;
 
     private Vector3 _lastValidPosition;
 
@@ -43,13 +45,19 @@ public class MarbleMovementController : MonoBehaviour
 
     private LayerMask levelLayerMask;
 
-    void Start()
+    private void Start()
     { 
-        _marbleInputActionAsset.FindActionMap("Movement").Enable();
         _lastValidPosition = transform.position;
         _moveAction = _marbleInputActionAsset.FindAction("Move");
         _rigidbody = GetComponent<Rigidbody>();
+        _initialLinearDamping = _rigidbody.linearDamping;
         levelLayerMask = LayerMask.GetMask("Level");
+        Provider.Instance.Resolve<GameStateManager>().LevelStateChanged += OnLevelStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        Provider.Instance.Resolve<GameStateManager>().LevelStateChanged -= OnLevelStateChanged;
     }
 
     void Update()
@@ -112,6 +120,20 @@ public class MarbleMovementController : MonoBehaviour
         _rigidbody.angularVelocity = Vector3.zero;
         state = State.Normal;
         Respawn();
+    }
+
+    private void OnLevelStateChanged(GameStateManager.LevelState state)
+    {
+        if (state == GameStateManager.LevelState.Playing)
+        {
+            _marbleInputActionAsset.FindActionMap("Movement").Enable();
+            _rigidbody.linearDamping = _initialLinearDamping;
+        }
+        else
+        {
+            _marbleInputActionAsset.FindActionMap("Movement").Disable();
+            _rigidbody.linearDamping = 2;
+        }
     }
 
 #if UNITY_EDITOR
