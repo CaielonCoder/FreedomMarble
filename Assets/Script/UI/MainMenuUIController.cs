@@ -15,7 +15,7 @@ public class MainMenuUIController : MonoBehaviour
     private SelectorButton _marbleSelector;
 
 
-    protected void OnEnable()
+    protected void Awake()
     {
         _rootVE = GetComponent<UIDocument>().rootVisualElement;
         _playButton = _rootVE.Query<Button>("Play");
@@ -27,6 +27,8 @@ public class MainMenuUIController : MonoBehaviour
         _marbleSelector = _rootVE.Query<SelectorButton>("MarbleSelector");
         _marbleSelector.NextPressed += OnNextMarblePressed;
         _marbleSelector.PrevPressed += OnPrevMarblePressed;
+
+        _rootVE.Q<Label>("HighScoreNumber").text = PlayerPrefs.GetInt("HighScore", 0).ToString();
     }
 
     private void OnPlayButtonClicked()

@@ -34,6 +34,11 @@ public class InGameUIController : MonoBehaviour
         enabled = false;
     }
 
+    private void OnDestroy()
+    {
+        _gameStateManager.LevelStateChanged -= OnLevelStateChanged;
+    }
+
     private void OnLevelStateChanged(GameStateManager.LevelState state)
     {
         switch (state)
@@ -45,13 +50,6 @@ public class InGameUIController : MonoBehaviour
                 StartCoroutine(TimeOverAnimation());
                 break;
         }
-    }
-
-    private void OnGoalReached()
-    {
-        _hud.gameObject.SetActive(false);
-        _levelCompletePanel.gameObject.SetActive(true);
-        StartCoroutine(LevelCompleteAnimation());
     }
 
     protected void Update()
@@ -92,6 +90,7 @@ public class InGameUIController : MonoBehaviour
 
     private IEnumerator TimeOverAnimation()
     {
+        _hud.gameObject.SetActive(false);
         _timeOverPanel.gameObject.SetActive(true);
         Label finalScore = _timeOverPanel.rootVisualElement.Q<Label>("Score");
         finalScore.text = _scoreManager.Score.ToString();

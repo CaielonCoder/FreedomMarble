@@ -13,7 +13,9 @@ public class ScoreManager : MonoBehaviour
     private Rigidbody _marbleRigidbody;
     private float _accumulatedVelocity = 0;
     private bool _accumulateVelocityActive = false;
+
     private GameStateManager _gameStateManager;
+    private InGameUIController _inGameUIController;
 
     private void Start()
     {
@@ -27,15 +29,14 @@ public class ScoreManager : MonoBehaviour
     {
         switch (state)
         {
-            case GameStateManager.LevelState.Intro:
-                Score += ScoreFinishBonus + ScoreTimeBonus;
-                break;
             case GameStateManager.LevelState.Playing:
                 StartCoroutine(UpdateScore());
                 break;
             case GameStateManager.LevelState.Outro:
                 _accumulateVelocityActive = false;
                 ScoreTimeBonus = Mathf.CeilToInt(_gameStateManager.TimeLeft * TIME_BONUS_PER_SECOND);
+                _inGameUIController = Provider.Instance.Resolve<InGameUIController>();
+                _inGameUIController.AnimationFinish += OnUIAnimationFinish;
                 break;
             case GameStateManager.LevelState.TimeOver:
                 _accumulateVelocityActive = false;
@@ -60,4 +61,13 @@ public class ScoreManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
     }
+
+    private void OnUIAnimationFinish()
+    {
+        Score += ScoreFinishBonus + ScoreTimeBonus;
+        _inGameUIController.AnimationFinish -= OnUIAnimationFinish;
+        int highScore = PlayerPrefs.GetInt("HighScore", 0);
+        if (Score > highScore) PlayerPrefs.SetInt("HighScore", Score);
+    }
+
 }
