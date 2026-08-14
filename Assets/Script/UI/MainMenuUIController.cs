@@ -14,8 +14,9 @@ public class MainMenuUIController : MonoBehaviour
     private Button _quitButton;
     private SelectorButton _marbleSelector;
 
+    private AudioManager _audioManager;
 
-    protected void Awake()
+    protected void Start()
     {
         _rootVE = GetComponent<UIDocument>().rootVisualElement;
         _playButton = _rootVE.Query<Button>("Play");
@@ -29,25 +30,32 @@ public class MainMenuUIController : MonoBehaviour
         _marbleSelector.PrevPressed += OnPrevMarblePressed;
 
         _rootVE.Q<Label>("HighScoreNumber").text = PlayerPrefs.GetInt("HighScore", 0).ToString();
+
+        _audioManager = Provider.Instance.Resolve<AudioManager>();
+        _audioManager.PlayMusic("MainMenuMusic");
     }
 
     private void OnPlayButtonClicked()
     {
+        _audioManager.PlaySFX("Click");
         Provider.Instance.Resolve<GameStateManager>().StartGame();
     }
 
     private void OnQuitButtonClicked()
     {
+        _audioManager.PlaySFX("Click");
         Application.Quit();
     }   
 
     private void OnNextMarblePressed()
     {
+        _audioManager.PlaySFX("Click");
         _marbleVisuals.ChangeToNext();
     }
 
     private void OnPrevMarblePressed()
     {
+        _audioManager.PlaySFX("Click");
         _marbleVisuals.ChangeToPrev();
     }
 }

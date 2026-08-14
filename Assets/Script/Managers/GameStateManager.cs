@@ -18,7 +18,13 @@ public class GameStateManager : MonoBehaviour
 
     private LevelState _state = LevelState.Intro;
     private InGameUIController _UIController;
+    private AudioManager _audioManager;
     private Goal _goal;
+
+    private void Start()
+    {
+        _audioManager = Provider.Instance.Resolve<AudioManager>();
+    }
 
     public void StartGame()
     {
@@ -35,6 +41,8 @@ public class GameStateManager : MonoBehaviour
             {
                 TimeLeft = 0;
                 _state = LevelState.TimeOver;
+                _audioManager.StopMusic();
+                _audioManager.PlaySFX("TimeOver");
                 LevelStateChanged?.Invoke(_state);
                 break;
             }
@@ -47,6 +55,7 @@ public class GameStateManager : MonoBehaviour
         _state = LevelState.Intro;
         TimeLeft = 60;
         LevelStateChanged?.Invoke(_state);
+        _audioManager.PlayMusic("GameplayMusic");
         _UIController = Provider.Instance.Resolve<InGameUIController>();
         _UIController.AnimationFinish += OnUIControllerAnimationFinish;
         _goal = Provider.Instance.Resolve<Goal>();
@@ -75,6 +84,7 @@ public class GameStateManager : MonoBehaviour
     private void OnGoalReached()
     {
         _state = LevelState.Outro;
+        _audioManager.PlaySFX("LevelComplete");
         LevelStateChanged?.Invoke(_state);
     }
 

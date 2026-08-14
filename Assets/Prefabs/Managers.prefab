@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8156375020849340997}
   - component: {fileID: 8085999267985069461}
   - component: {fileID: 6702786887871012550}
+  - component: {fileID: 1843088631761123136}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -70,3 +71,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c4b4b81eceaa64b92c9dc159c8b6ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameStateManager
+--- !u!114 &1843088631761123136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67b5179776c46449b8da9e29c6b348b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  _audioClips:
+  - name: MainMenuMusic
+    clip: {fileID: 8300000, guid: e4e8eb2550fd3d443aac9f899fae13df, type: 3}
+    volume: 0.8
+  - name: GameplayMusic
+    clip: {fileID: 8300000, guid: 8859c3271b3c62042bb29474eec5e031, type: 3}
+    volume: 0.3
+  - name: Click
+    clip: {fileID: 8300000, guid: 0af910a90bb3f514684cd37706ccef47, type: 3}
+    volume: 1
+  - name: LevelComplete
+    clip: {fileID: 8300000, guid: ae228bda4b1f8794c8acebbbb9cf6d77, type: 3}
+    volume: 1
+  - name: TimeOver
+    clip: {fileID: 8300000, guid: 53196484a103d3f47ba194aea51505e8, type: 3}
+    volume: 1
+  - name: Fall
+    clip: {fileID: 8300000, guid: 484b210d45b87a043b70ede1eb53e60c, type: 3}
+    volume: 0.6
+  - name: Collision
+    clip: {fileID: 8300000, guid: 4fce2717235497c49831172519156b85, type: 3}
+    volume: 0.9

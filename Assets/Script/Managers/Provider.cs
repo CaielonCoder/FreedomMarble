@@ -28,6 +28,7 @@ public class Provider : MonoBehaviour
     {
         entities[typeof(GameStateManager)] = GetComponent<GameStateManager>();
         entities[typeof(ScoreManager)] = GetComponent<ScoreManager>();
+        entities[typeof(AudioManager)] = GetComponent<AudioManager>();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

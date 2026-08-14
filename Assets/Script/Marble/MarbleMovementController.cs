@@ -30,6 +30,7 @@ public class MarbleMovementController : MonoBehaviour
     [SerializeField]
     private float _validPositionsGridSize = 0.666f;
 
+    private AudioManager _audioManager;
     private InputAction _moveAction;
     private Rigidbody _rigidbody;
     private float _initialLinearDamping;
@@ -53,6 +54,7 @@ public class MarbleMovementController : MonoBehaviour
         _initialLinearDamping = _rigidbody.linearDamping;
         levelLayerMask = LayerMask.GetMask("Level");
         Provider.Instance.Resolve<GameStateManager>().LevelStateChanged += OnLevelStateChanged;
+        _audioManager = Provider.Instance.Resolve<AudioManager>();
     }
 
     private void OnDestroy()
@@ -86,6 +88,7 @@ public class MarbleMovementController : MonoBehaviour
         {
             FallOutside();
             state = State.FallOutside;
+            _audioManager.PlaySFX("Fall");
             StartCoroutine(RespawnCoroutine());
         }
     }
@@ -133,6 +136,14 @@ public class MarbleMovementController : MonoBehaviour
         {
             _marbleInputActionAsset.FindActionMap("Movement").Disable();
             _rigidbody.linearDamping = 2;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Guardrail"))
+        {
+            _audioManager.PlaySFX("Collision");
         }
     }
 
