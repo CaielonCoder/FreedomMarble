@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4188929957586866892
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7220943749733765679, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3f7c2c40381afd746b72281d1e4f52d0, type: 2}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.437022
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.7999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.550317
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8394391713118595392, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166248444599923706, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
+      propertyPath: m_Name
+      value: Level1_CV_Wall_2_F
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c182ba6a60749394aa660c95eae70b67, type: 3}
