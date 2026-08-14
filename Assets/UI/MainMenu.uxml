@@ -1,15 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/MainMenu.uss?fileID=7433441132597879392&amp;guid=9014446ea3ed86044be963033d0a9f06&amp;type=3#MainMenu"/>
     <ui:VisualElement name="Panel" class="panel" style="flex-grow: 1; align-content: auto; justify-content: center;">
+        <ui:VisualElement name="ScoreContainer" class="menu" style="flex-grow: 1; position: absolute; height: 90px; width: 569px; top: 30px; left: 1321px; flex-direction: row; align-content: flex-start; justify-content: space-between; align-self: auto; right: auto;">
+            <ui:Label text="High Score" name="HighScoreText" class="unity-button" style="align-self: flex-start; justify-content: flex-start; width: auto; height: auto; background-color: rgba(0, 0, 0, 0); font-size: 40px; border-left-width: 15px; border-left-color: rgba(85, 85, 85, 0);"/>
+            <ui:Label text="254631" name="HighScoreNumber" class="unity-button" style="align-self: flex-end; width: auto; height: auto; background-color: rgba(0, 0, 0, 0); font-size: 40px; border-right-width: 15px; border-right-color: rgba(85, 85, 85, 0);"/>
+        </ui:VisualElement>
         <ui:VisualElement name="Container" class="menu" style="width: auto; height: auto; left: 10%; right: 60%; position: absolute; top: 0%; bottom: 0%; padding-top: 200px; -unity-material: url(&quot;&quot;);">
-            <ui:Image source="project://database/Assets/UI/Title.png?fileID=2800000&amp;guid=8faf77c49a907e44183b170762357a27&amp;type=3#Title" name="Title" tint-color="rgb(197, 197, 197)" style="position: absolute; top: 3%; left: -50px; width: 697px; height: 206px;"/>
             <ui:Button text="Play" name="Play"/>
             <SelectorButton text="Marble" name="MarbleSelector" class="selector-button" style="align-content: center; justify-content: center; -unity-material: url(&quot;project://database/Assets/Shaders/UI.shadergraph?fileID=-876546973899608171&amp;guid=9b098a9f60c3dc2488b89c3758a65eae&amp;type=3#UI&quot;) prop(&quot;_OverColor&quot; rgba(0, 0, 0, 0.8));"/>
             <ui:Button text="Quit" name="Quit"/>
         </ui:VisualElement>
-    </ui:VisualElement>
-    <ui:VisualElement name="ScoreContainer" class="menu" style="flex-grow: 1; position: absolute; height: 90px; width: 569px; top: 30px; left: 1321px; flex-direction: row; align-content: flex-start; justify-content: space-between; align-self: auto; right: auto;">
-        <ui:Label text="High Score" name="HighScoreText" class="unity-button" style="align-self: flex-start; justify-content: flex-start; width: auto; height: auto; background-color: rgba(0, 0, 0, 0); font-size: 40px; border-left-width: 15px; border-left-color: rgba(85, 85, 85, 0);"/>
-        <ui:Label text="254631" name="HighScoreNumber" class="unity-button" style="align-self: flex-end; width: auto; height: auto; background-color: rgba(0, 0, 0, 0); font-size: 40px; border-right-width: 15px; border-right-color: rgba(85, 85, 85, 0);"/>
+        <ui:VisualElement name="Title" enabled="true" style="flex-grow: 1; position: absolute; width: 693px; height: 283px; top: 3px; left: 172px;">
+            <ui:Label text="Freedom" name="Freedom" style="position: absolute; color: rgb(208, 208, 208); -unity-font-definition: url(&quot;project://database/Assets/Fonts/Orbitron-VariableFont_wght.ttf?fileID=12800000&amp;guid=6b5dd868f85b9454ca113926882a9701&amp;type=3#Orbitron-VariableFont_wght&quot;); -unity-font-style: bold; font-size: 120px; top: 18px; left: 20px;"/>
+            <ui:Label text="Marble" name="Marble" style="position: absolute; color: rgb(165, 165, 165); -unity-font-definition: url(&quot;project://database/Assets/Fonts/Orbitron-VariableFont_wght.ttf?fileID=12800000&amp;guid=6b5dd868f85b9454ca113926882a9701&amp;type=3#Orbitron-VariableFont_wght&quot;); -unity-font-style: italic; font-size: 100px; top: 143px; left: 28px;"/>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
