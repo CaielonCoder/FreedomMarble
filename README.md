@@ -7,8 +7,8 @@ A physics-based marble game. Reach the goal as fast as you can to score more poi
 
 ## 💾 Downloads
 
-[![Windows](https://img.shields.io/badge/Windows-007806?style=for-the-badge&logo=windows&logoColor=white)]([https://github.com/CaielonCoder/FreedomMarble/releases/download/v0.1.1/FreedomMarble_v0.1.1_Win.zip](https://github.com/CaielonCoder/FreedomMarble/releases/latest))
-[![Linux](https://img.shields.io/badge/Linux-007806?style=for-the-badge&logo=linux&logoColor=white)]([https://github.com/CaielonCoder/FreedomMarble/releases/download/v0.1.1/FreedomMarble_v0.1.1_Linux.zip](https://github.com/CaielonCoder/FreedomMarble/releases/latest))
+[![Windows](https://img.shields.io/badge/Windows-007806?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/CaielonCoder/FreedomMarble/releases/download/v0.1.1/FreedomMarble_v0.1.1_Win.zip)
+[![Linux](https://img.shields.io/badge/Linux-007806?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/CaielonCoder/FreedomMarble/releases/download/v0.1.1/FreedomMarble_v0.1.1_Linux.zip)
 
 
 ## 🎮 Controls
