@@ -1,0 +1,4 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Editor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=c0e8778791a782f4fafda55e70599f96&amp;type=3#LevelEditor"/>
+    <ui:Button text="Enable" name="EnableButton"/>
+</ui:UXML>
