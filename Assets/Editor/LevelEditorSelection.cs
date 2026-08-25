@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -6,6 +7,8 @@ namespace LevelEditor
 {
     public class Selection
     {
+        public event Action<Vector2Int, int> SelectionEdited; // Vector2Int tile x and y, float new y position
+
         private LevelData _levelData;
         private int x;
         private int y;
@@ -28,9 +31,9 @@ namespace LevelEditor
             isSomethinSelected = false;
         }
 
-        public bool OnSceneGUI(SceneView view)
+        public void OnSceneGUI(SceneView view)
         {
-            if (!isSomethinSelected) return false;
+            if (!isSomethinSelected) return;
 
             ChunkData chunk = _levelData.Chunks[0];
             TileData tile = chunk.Tiles[x, y];
@@ -44,13 +47,8 @@ namespace LevelEditor
             if (EditorGUI.EndChangeCheck())
             {
                 int delta_y = Mathf.RoundToInt((newCenter.y - center.y) / LevelData.STEP_Y);
-                tile.vertexY[0] += delta_y;
-                tile.vertexY[1] += delta_y;
-                tile.vertexY[2] += delta_y;
-                tile.vertexY[3] += delta_y;
-                return true;
+                SelectionEdited?.Invoke(new Vector2Int(x, y), delta_y);
             }
-            return false;
         }
 
         public void Draw()

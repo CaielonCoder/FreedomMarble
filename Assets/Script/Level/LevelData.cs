@@ -32,5 +32,5 @@ public struct ChunkData
 [System.Serializable]
 public struct TileData
 {
-    public int[] vertexY;
+    public int[] vertexY; // 0 = min X, min Y ; 1 = max X, min Y ; 2 = max X, max Y ; 3 = min X, max Y
 }
