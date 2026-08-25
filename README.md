@@ -18,6 +18,7 @@ A physics-based marble game. Reach the goal as fast as you can to score more poi
 
 ## 🎵 Credits & Attributions
 
+* [**Texture Pack 36**](https://opengameart.org/content/free-materials-pack-36-redux) (Wall Texture) by **[Yughues](https://www.artstation.com/yughues)** — CC-BY.
 * [**Chill lofi inspired**](https://opengameart.org/content/chill-lofi-inspired) (Main Menu Music) by **[omfgdude](https://opengameart.org/users/omfgdude)** — CC0.
 * [**Night Prowler**](https://opengameart.org/content/night-prowler) (In-Game Music) by **[Section 31 -Tech](https://opengameart.org/users/section31)** — CC0.
 * **SFXs** from **[Kenney](https://www.kenney.nl/assets/category:Audio)** — CC0.
