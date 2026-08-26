@@ -95,6 +95,7 @@ namespace LevelEditor
                 _editionEnabled = false;
                 _selection.SelectionEdited -= OnSelectionEdited;
                 _rootContainer.visible = false;
+                AssetDatabase.SaveAssets();
             }
         }
 
@@ -118,27 +119,19 @@ namespace LevelEditor
             }
         }
 
-        private void OnReduceZClicked()
-        {
-            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0), _levelData.Chunks[0].Tiles.GetLength(1) - 1);
-            _levelRenderer.OnDataUpdated();
-        }
+        private void OnReduceZClicked() { ChangeChunkSize(0, -1); }
 
-        private void OnReduceXClicked()
-        {
-            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0) - 1, _levelData.Chunks[0].Tiles.GetLength(1));
-            _levelRenderer.OnDataUpdated();
-        }
+        private void OnReduceXClicked() { ChangeChunkSize(-1, 0); }
 
-        private void OnExtendZClicked()
-        {
-            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0), _levelData.Chunks[0].Tiles.GetLength(1) + 1);
-            _levelRenderer.OnDataUpdated();
-        }
+        private void OnExtendZClicked() { ChangeChunkSize(0, 1); }
 
-        private void OnExtendXClicked()
+        private void OnExtendXClicked() { ChangeChunkSize(1, 0); }
+
+        private void ChangeChunkSize(int x, int y)
         {
-            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0) + 1, _levelData.Chunks[0].Tiles.GetLength(1));
+            _levelData.Chunks[0].Resize(_levelData.Chunks[0].SizeX + x, _levelData.Chunks[0].SizeY + y);
+            EditorUtility.SetDirty(_levelData);
+            AssetDatabase.SaveAssets();
             _levelRenderer.OnDataUpdated();
         }
 
@@ -149,13 +142,12 @@ namespace LevelEditor
                 float squareMargin = 0.2f;
 
                 ChunkData chunk = _levelData.Chunks[0];
-                TileData[,] tiles = chunk.Tiles;
                 Handles.color = new Color(0f, 1f, 0.8f, 0.5f);
                 int x = Mathf.FloorToInt(_pointerPosition.x);
                 int y = Mathf.FloorToInt(_pointerPosition.z);
-                if (x >= 0 && x < tiles.GetLength(0) && y >= 0 && y < tiles.GetLength(1))
+                if (x >= 0 && x < chunk.SizeX && y >= 0 && y < chunk.SizeY)
                 {
-                    TileData tile = chunk.Tiles[x, y];
+                    TileData tile = chunk.GetTile(x, y);
                     Vector3[] verts = new Vector3[4];
                     verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + HANDLES_Z_BIAS, y + squareMargin);
                     verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + HANDLES_Z_BIAS, y + squareMargin);
@@ -214,43 +206,43 @@ namespace LevelEditor
 
         private void UpdateVertices(int tileX, int tileY, int delta_y)
         {
-            TileData[,] tiles = _levelData.Chunks[0].Tiles;
-            int maxX = tiles.GetLength(0) - 1;
-            int maxY = tiles.GetLength(1) - 1;
+            ChunkData chunk = _levelData.Chunks[0];
+            int maxX = chunk.SizeX - 1;
+            int maxY = chunk.SizeY - 1;
 
-            if (_behaviourButtons[0, 0].value && tileX > 0 && tileY > 0) tiles[tileX - 1, tileY - 1].vertexY[2] += delta_y;
+            if (_behaviourButtons[0, 0].value && tileX > 0 && tileY > 0) chunk.GetTile(tileX - 1, tileY - 1).vertexY[2] += delta_y;
 
             if (_behaviourButtons[1, 0].value && tileY > 0)
             {
-                tiles[tileX, tileY - 1].vertexY[3] += delta_y;
-                tiles[tileX, tileY - 1].vertexY[2] += delta_y;
+                chunk.GetTile(tileX, tileY - 1).vertexY[3] += delta_y;
+                chunk.GetTile(tileX, tileY - 1).vertexY[2] += delta_y;
             }
 
-            if (_behaviourButtons[2, 0].value && tileX < maxX && tileY > 0) tiles[tileX + 1, tileY - 1].vertexY[3] += delta_y;
+            if (_behaviourButtons[2, 0].value && tileX < maxX && tileY > 0) chunk.GetTile(tileX + 1, tileY - 1).vertexY[3] += delta_y;
 
             if (_behaviourButtons[0, 1].value && tileX > 0)
             {
-                tiles[tileX - 1, tileY].vertexY[2] += delta_y;
-                tiles[tileX - 1, tileY].vertexY[1] += delta_y;
+                chunk.GetTile(tileX - 1, tileY).vertexY[2] += delta_y;
+                chunk.GetTile(tileX - 1, tileY).vertexY[1] += delta_y;
             }
 
             if (_behaviourButtons[2, 1].value && tileX < maxX)
             {
-                tiles[tileX + 1, tileY].vertexY[0] += delta_y;
-                tiles[tileX + 1, tileY].vertexY[3] += delta_y;
+                chunk.GetTile(tileX + 1, tileY).vertexY[0] += delta_y;
+                chunk.GetTile(tileX + 1, tileY).vertexY[3] += delta_y;
             }
 
-            if (_behaviourButtons[0, 2].value && tileX > 0 && tileY < maxY) tiles[tileX - 1, tileY + 1].vertexY[1] += delta_y;
+            if (_behaviourButtons[0, 2].value && tileX > 0 && tileY < maxY) chunk.GetTile(tileX - 1, tileY + 1).vertexY[1] += delta_y;
 
             if (_behaviourButtons[1, 2].value && tileY < maxY)
             {
-                tiles[tileX, tileY + 1].vertexY[0] += delta_y;
-                tiles[tileX, tileY + 1].vertexY[1] += delta_y;
+                chunk.GetTile(tileX, tileY + 1).vertexY[0] += delta_y;
+                chunk.GetTile(tileX, tileY + 1).vertexY[1] += delta_y;
             }
 
-            if (_behaviourButtons[2, 2].value && tileX < maxX && tileY < maxY) tiles[tileX + 1, tileY + 1].vertexY[0] += delta_y;
+            if (_behaviourButtons[2, 2].value && tileX < maxX && tileY < maxY) chunk.GetTile(tileX + 1, tileY + 1).vertexY[0] += delta_y;
 
-            TileData tile = _levelData.Chunks[0].Tiles[tileX, tileY];
+            TileData tile = chunk.GetTile(tileX, tileY);
             tile.vertexY[0] += delta_y;
             tile.vertexY[1] += delta_y;
             tile.vertexY[2] += delta_y;

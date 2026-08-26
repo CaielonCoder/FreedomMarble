@@ -37,10 +37,10 @@ namespace LevelEditor
 
             ChunkData chunk = _levelData.Chunks[0];
 
-            if (x >= chunk.Tiles.GetLength(0)) x = chunk.Tiles.GetLength(0) - 1;
-            if (y >= chunk.Tiles.GetLength(1)) y = chunk.Tiles.GetLength(1) - 1;
+            if (x >= chunk.SizeX) x = chunk.SizeX - 1;
+            if (y >= chunk.SizeY) y = chunk.SizeY - 1;
 
-            TileData tile = chunk.Tiles[x, y];
+            TileData tile = chunk.GetTile(x, y);
             float centerY = (tile.vertexY[0] + tile.vertexY[1] + tile.vertexY[2] + tile.vertexY[3]) * LevelData.STEP_Y;
             Vector3 center = new Vector3(x + 0.5f, centerY / 4.0f, y + 0.5f);
 
@@ -62,7 +62,7 @@ namespace LevelEditor
             float squareMargin = 0.3f;
 
             ChunkData chunk = _levelData.Chunks[0];
-            TileData tile = chunk.Tiles[x, y];
+            TileData tile = chunk.GetTile(x, y);
             Vector3[] verts = new Vector3[4];
             verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
             verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);

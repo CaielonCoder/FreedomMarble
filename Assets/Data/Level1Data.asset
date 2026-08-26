@@ -14,3 +14,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   Chunks:
   - Position: {x: 0, y: 0, z: 0}
+    _tiles:
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: fefffffffafffffffafffffffeffffff
+    - vertexY: fefffffffafffffffafffffffeffffff
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: fafffffffcfffffffcfffffffaffffff
+    - vertexY: fafffffffcfffffffcfffffffaffffff
+    - vertexY: 00000000000000000100000000000000
+    - vertexY: 00000000010000000200000000000000
+    - vertexY: 00000000020000000200000000000000
+    - vertexY: 0000000002000000fdffffff00000000
+    - vertexY: 00000000fdfffffffbffffff00000000
+    - vertexY: fcfffffffbfffffffffffffffcffffff
+    - vertexY: fcffffffffffffff00000000fcffffff
+    - vertexY: 00000000000000000100000001000000
+    - vertexY: 01000000010000000200000002000000
+    - vertexY: 02000000020000000200000002000000
+    - vertexY: 0200000002000000fdfffffffdffffff
+    - vertexY: fdfffffffdfffffffbfffffffbffffff
+    - vertexY: fbfffffffbffffffffffffffffffffff
+    - vertexY: ffffffffffffffff0000000000000000
+    - vertexY: 00000000000000000000000001000000
+    - vertexY: 01000000000000000000000002000000
+    - vertexY: 02000000000000000000000002000000
+    - vertexY: 020000000000000000000000fdffffff
+    - vertexY: fdffffff0000000000000000fbffffff
+    - vertexY: fbfffffffcfffffffcffffffffffffff
+    - vertexY: fffffffffcfffffffcffffff00000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: fcfffffffafffffffafffffffcffffff
+    - vertexY: fcfffffffafffffffafffffffcffffff
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: 00000000000000000000000000000000
+    - vertexY: fafffffffefffffffefffffffaffffff
+    - vertexY: fafffffffefffffffefffffffaffffff
+    _sizeX: 7
+    _sizeY: 7

@@ -4,34 +4,35 @@ using UnityEngine;
 public class LevelData : ScriptableObject
 {
     public const float STEP_Y = 0.3f;
+    [SerializeField]
     public ChunkData[] Chunks;
 
     public LevelData()
     {
         Chunks = new ChunkData[1];
         Chunks[0] = new ChunkData();
-        Chunks[0].Tiles = new TileData[6, 6];
-        for (int x = 0; x < Chunks[0].Tiles.GetLength(0); x++)
-        {
-            for (int y = 0; y < Chunks[0].Tiles.GetLength(1); y++)
-            {
-                Chunks[0].Tiles[x, y] = new TileData(0, 0, 0, 0);
-            }
-        }
     }
 }
 
 [System.Serializable]
-public struct ChunkData
+public class ChunkData
 {
     public Vector3 Position;
-    public TileData[,] Tiles;
+    public int SizeX { get => _sizeX; }
+    public int SizeY { get => _sizeY; }
+
+    [SerializeField]
+    private TileData[] _tiles = new TileData[16];
+    [SerializeField]
+    private int _sizeX = 4;
+    [SerializeField]
+    private int _sizeY = 4;
 
     public void Resize(int newX, int newY)
     {
-        TileData[,] newTiles = new TileData[newX, newY];
-        int oldX = Tiles.GetLength(0);
-        int oldY = Tiles.GetLength(1);
+        TileData[] newTiles = new TileData[newX * newY];
+        int oldX = _sizeX;
+        int oldY = _sizeY;
 
         for (int x = 0; x < newX; x++)
         {
@@ -39,18 +40,31 @@ public struct ChunkData
             {
                 int xx = x < oldX ? x : oldX - 1;
                 int yy = y < oldY ? y : oldY - 1;
-                newTiles[x, y] = new TileData(Tiles[xx, yy]);
+                newTiles[y + x * newY] = new TileData(GetTile(xx, yy));
             }
         }
-        Tiles = newTiles;
+        _tiles = newTiles;
+        _sizeX = newX;
+        _sizeY = newY;
+    }
+
+    public TileData GetTile(int x, int y)
+    {
+        return _tiles[y + x * _sizeY];
+    }
+
+    public void SetTile(TileData data, int x, int y)
+    {
+        _tiles[y + x * _sizeY] = data;
     }
 }
 
 [System.Serializable]
-public struct TileData
+public class TileData
 {
-    public int[] vertexY; // 0 = min X, min Y ; 1 = max X, min Y ; 2 = max X, max Y ; 3 = min X, max Y
+    public int[] vertexY = new int[4]; // 0 = min X, min Y ; 1 = max X, min Y ; 2 = max X, max Y ; 3 = min X, max Y
 
+    public TileData() : this(0, 0, 0, 0) { }
     public TileData(TileData other) : this(other.vertexY[0], other.vertexY[1], other.vertexY[2], other.vertexY[3]) { }
 
     public TileData(int x1y1, int x2y1, int x2y2, int x1y2)
