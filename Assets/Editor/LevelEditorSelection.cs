@@ -36,6 +36,10 @@ namespace LevelEditor
             if (!isSomethinSelected) return;
 
             ChunkData chunk = _levelData.Chunks[0];
+
+            if (x >= chunk.Tiles.GetLength(0)) x = chunk.Tiles.GetLength(0) - 1;
+            if (y >= chunk.Tiles.GetLength(1)) y = chunk.Tiles.GetLength(1) - 1;
+
             TileData tile = chunk.Tiles[x, y];
             float centerY = (tile.vertexY[0] + tile.vertexY[1] + tile.vertexY[2] + tile.vertexY[3]) * LevelData.STEP_Y;
             Vector3 center = new Vector3(x + 0.5f, centerY / 4.0f, y + 0.5f);

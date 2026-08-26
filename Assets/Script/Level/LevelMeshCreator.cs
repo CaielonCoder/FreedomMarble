@@ -76,6 +76,7 @@ public class LevelMeshCreator : MonoBehaviour
         }
 
         if (!_floorMesh) _floorMesh = new Mesh();
+        _floorMesh.triangles = null;
         _floorMesh.vertices = vertices;
         _floorMesh.normals = normals;
         _floorMesh.uv = uv;

@@ -11,6 +11,7 @@ namespace LevelEditor
 
         [SerializeField]
         private VisualTreeAsset m_VisualTreeAsset = default;
+        private VisualElement _rootContainer;
         private Button _enabledButton;
 
         private bool _editionEnabled = false;
@@ -36,8 +37,16 @@ namespace LevelEditor
 
             VisualElement editorUXML = m_VisualTreeAsset.Instantiate();
 
+            _rootContainer = editorUXML.Q<VisualElement>("RootContainer");
+            _rootContainer.visible = false;
+
             _enabledButton = editorUXML.Q<Button>("EnableButton");
             _enabledButton.clicked += OnEnabledClicked;
+
+            editorUXML.Q<Button>("ChunkExtendXButton").clicked += OnExtendXClicked;
+            editorUXML.Q<Button>("ChunkExtendZButton").clicked += OnExtendZClicked;
+            editorUXML.Q<Button>("ChunkReduceXButton").clicked += OnReduceXClicked;
+            editorUXML.Q<Button>("ChunkReduceZButton").clicked += OnReduceZClicked;
 
             _behaviourButtons[0, 0] = editorUXML.Q<Toggle>("TopLeft");
             _behaviourButtons[1, 0] = editorUXML.Q<Toggle>("Top");
@@ -55,6 +64,7 @@ namespace LevelEditor
         {
             if (!_editionEnabled)
             {
+                _rootContainer.visible = true;
                 _levelRenderer = FindAnyObjectByType<LevelMeshCreator>();
                 if (_levelRenderer == null)
                 {
@@ -84,6 +94,7 @@ namespace LevelEditor
                 _enabledButton.text = "Enable";
                 _editionEnabled = false;
                 _selection.SelectionEdited -= OnSelectionEdited;
+                _rootContainer.visible = false;
             }
         }
 
@@ -105,6 +116,30 @@ namespace LevelEditor
                     HandleMouseDown(view);
                     break;
             }
+        }
+
+        private void OnReduceZClicked()
+        {
+            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0), _levelData.Chunks[0].Tiles.GetLength(1) - 1);
+            _levelRenderer.OnDataUpdated();
+        }
+
+        private void OnReduceXClicked()
+        {
+            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0) - 1, _levelData.Chunks[0].Tiles.GetLength(1));
+            _levelRenderer.OnDataUpdated();
+        }
+
+        private void OnExtendZClicked()
+        {
+            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0), _levelData.Chunks[0].Tiles.GetLength(1) + 1);
+            _levelRenderer.OnDataUpdated();
+        }
+
+        private void OnExtendXClicked()
+        {
+            _levelData.Chunks[0].Resize(_levelData.Chunks[0].Tiles.GetLength(0) + 1, _levelData.Chunks[0].Tiles.GetLength(1));
+            _levelRenderer.OnDataUpdated();
         }
 
         private void HandleRepaint()
