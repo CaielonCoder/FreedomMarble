@@ -7,7 +7,7 @@ namespace LevelEditor
 {
     public class LevelEditor : EditorWindow
     {
-        public const float HANDLES_Z_BIAS = 0.01f;
+        public const float HANDLES_Z_BIAS = 0.02f;
 
         [SerializeField]
         private VisualTreeAsset m_VisualTreeAsset = default;
@@ -77,7 +77,7 @@ namespace LevelEditor
                     _editionEnabled = true;
                     _levelData = _levelRenderer.GetLevelData();
                     _levelRenderer.OnDataUpdated();
-                    _selection = new Selection(_levelData);
+                    _selection = new Selection(_levelData, this);
                     _selection.SelectionEdited += OnSelectionEdited;
 
                     // TODO: create custom component for manage the collision
@@ -139,10 +139,10 @@ namespace LevelEditor
         {
             if (_pointerPosition != Vector3.zero)
             {
-                float squareMargin = 0.2f;
+                float squareMargin = 0f;
 
                 ChunkData chunk = _levelData.Chunks[0];
-                Handles.color = new Color(0f, 1f, 0.8f, 0.5f);
+                Handles.color = new Color(0f, 1f, 0.8f, 0.3f);
                 int x = Mathf.FloorToInt(_pointerPosition.x);
                 int y = Mathf.FloorToInt(_pointerPosition.z);
                 if (x >= 0 && x < chunk.SizeX && y >= 0 && y < chunk.SizeY)
@@ -248,6 +248,12 @@ namespace LevelEditor
             tile.vertexY[2] += delta_y;
             tile.vertexY[3] += delta_y;
         }
+
+        public bool GetTileBehaviour(int x, int y)
+        {
+            return _behaviourButtons[x, y].value;
+        }
     }
+
 
 }
