@@ -31,16 +31,27 @@ public class ChunkData
     public void Resize(int newX, int newY)
     {
         TileData[] newTiles = new TileData[newX * newY];
-        int oldX = _sizeX;
-        int oldY = _sizeY;
+        int oldSizeX = _sizeX;
+        int oldSizeY = _sizeY;
 
         for (int x = 0; x < newX; x++)
         {
             for (int y = 0; y < newY; y++)
             {
-                int xx = x < oldX ? x : oldX - 1;
-                int yy = y < oldY ? y : oldY - 1;
+                int xx = x < oldSizeX ? x : oldSizeX - 1;
+                int yy = y < oldSizeY ? y : oldSizeY - 1;
                 newTiles[y + x * newY] = new TileData(GetTile(xx, yy));
+                TileData tile = newTiles[y + x * newY];
+                if (x >= oldSizeX)
+                {
+                    tile.vertexY[0] = tile.vertexY[1];
+                    tile.vertexY[3] = tile.vertexY[2];
+                }
+                if (y >= oldSizeY)
+                {
+                    tile.vertexY[0] = tile.vertexY[3];
+                    tile.vertexY[1] = tile.vertexY[2];
+                }
             }
         }
         _tiles = newTiles;
