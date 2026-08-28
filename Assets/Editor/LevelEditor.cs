@@ -22,6 +22,10 @@ namespace LevelEditor
         private Vector3 _pointerPosition;
         private Selection _selection;
 
+        private const float MULTISELECT_MIN_DISTANCE = 0.1f;
+        private bool _isMultiSelect;
+        private Vector3 _multiSelectStartPos;
+
         private Toggle[,] _behaviourButtons = new Toggle[3, 3];
 
         [MenuItem("Tools/LevelEditor")]
@@ -116,6 +120,12 @@ namespace LevelEditor
                 case EventType.MouseDown:
                     HandleMouseDown(view);
                     break;
+                case EventType.MouseDrag:
+                    HandleMouseDrag(view);
+                    break;
+                case EventType.MouseUp:
+                    HandleMouseUp(view);
+                    break;
             }
         }
 
@@ -162,6 +172,22 @@ namespace LevelEditor
             _selection.Draw();
         }
 
+        private void HandleMouseDrag(SceneView view)
+        {
+            if (Event.current.button == 0)
+            {
+                Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                object hit = HandleUtility.RaySnap(ray);
+                if (hit != null)
+                {
+                    _pointerPosition = ((RaycastHit)hit).point;
+                    _isMultiSelect = true;
+                    _selection.UpdateMultiSelect(_multiSelectStartPos, _pointerPosition);
+                }
+                view.Repaint();
+            }
+        }
+
         private void HandleMouseMove(SceneView view)
         {
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
@@ -181,13 +207,30 @@ namespace LevelEditor
         {
             if (Event.current.button == 0)
             {
-                _selection.SetSelection(_pointerPosition);
+                _multiSelectStartPos = _pointerPosition;
+                _isMultiSelect = false;
                 Event.current.Use();
             }
         }
-        private void OnSelectionEdited(Vector2Int tilePos, int delta_y)
+
+        private void HandleMouseUp(SceneView view)
         {
-            UpdateVertices(tilePos.x, tilePos.y, delta_y);
+            if (Event.current.button == 0)
+            {
+                if (_isMultiSelect)
+                {
+                    _selection.UpdateMultiSelect(_multiSelectStartPos, _pointerPosition);
+                }
+                else
+                {
+                    _selection.SetSelection(_pointerPosition);
+                }
+                Event.current.Use();
+            }
+        }
+        private void OnSelectionEdited(Vector2Int minPos, Vector2Int maxPos, int delta_y)
+        {
+            UpdateVertices(minPos, maxPos, delta_y);
             _levelRenderer.OnDataUpdated();
             _levelCollider.sharedMesh = null;
             _levelCollider.sharedMesh = _levelRenderer.GetFloorMesh();
@@ -204,49 +247,53 @@ namespace LevelEditor
             SceneView.duringSceneGui -= OnSceneGUI;
         }
 
-        private void UpdateVertices(int tileX, int tileY, int delta_y)
+        private void UpdateVertices(Vector2Int minPos, Vector2Int maxPos, int delta_y)
         {
             ChunkData chunk = _levelData.Chunks[0];
-            int maxX = chunk.SizeX - 1;
-            int maxY = chunk.SizeY - 1;
+            int chunkMaxX = chunk.SizeX - 1;
+            int chunkMaxY = chunk.SizeY - 1;
 
-            if (_behaviourButtons[0, 0].value && tileX > 0 && tileY > 0) chunk.GetTile(tileX - 1, tileY - 1).vertexY[2] += delta_y;
+            // Update the edges of selection
+            if (GetTileBehaviour(0, 0) && minPos.x > 0 && minPos.y > 0) chunk.GetTile(minPos.x-1, minPos.y-1).vertexY[2] += delta_y;
+            if (GetTileBehaviour(2, 0) && maxPos.x < chunkMaxX && minPos.y > 0) chunk.GetTile(maxPos.x+1, minPos.y-1).vertexY[3] += delta_y;
+            if (GetTileBehaviour(0, 2) && minPos.x > 0 && maxPos.y < chunkMaxY) chunk.GetTile(minPos.x-1, maxPos.y+1).vertexY[1] += delta_y;
+            if (GetTileBehaviour(2, 2) && maxPos.x < chunkMaxX && maxPos.y < chunkMaxY) chunk.GetTile(maxPos.x+1, maxPos.y+1).vertexY[0] += delta_y;
 
-            if (_behaviourButtons[1, 0].value && tileY > 0)
+            for (int tileX = minPos.x; tileX <= maxPos.x; tileX++)
             {
-                chunk.GetTile(tileX, tileY - 1).vertexY[3] += delta_y;
-                chunk.GetTile(tileX, tileY - 1).vertexY[2] += delta_y;
+                for (int tileY = minPos.y; tileY <= maxPos.y; tileY++)
+                {
+                    if (GetTileBehaviour(1, 0) && tileY > 0 && tileY == minPos.y)
+                    {
+                        chunk.GetTile(tileX, tileY - 1).vertexY[3] += delta_y;
+                        chunk.GetTile(tileX, tileY - 1).vertexY[2] += delta_y;
+                    }
+
+                    if (GetTileBehaviour(0, 1) && tileX > 0 && tileX == minPos.x)
+                    {
+                        chunk.GetTile(tileX - 1, tileY).vertexY[2] += delta_y;
+                        chunk.GetTile(tileX - 1, tileY).vertexY[1] += delta_y;
+                    }
+
+                    if (GetTileBehaviour(2, 1) && tileX < chunkMaxX && tileX == maxPos.x)
+                    {
+                        chunk.GetTile(tileX + 1, tileY).vertexY[0] += delta_y;
+                        chunk.GetTile(tileX + 1, tileY).vertexY[3] += delta_y;
+                    }
+
+                    if (GetTileBehaviour(1, 2) && tileY < chunkMaxY && tileY == maxPos.y)
+                    {
+                        chunk.GetTile(tileX, tileY + 1).vertexY[0] += delta_y;
+                        chunk.GetTile(tileX, tileY + 1).vertexY[1] += delta_y;
+                    }
+
+                    TileData tile = chunk.GetTile(tileX, tileY);
+                    tile.vertexY[0] += delta_y;
+                    tile.vertexY[1] += delta_y;
+                    tile.vertexY[2] += delta_y;
+                    tile.vertexY[3] += delta_y;
+                }
             }
-
-            if (_behaviourButtons[2, 0].value && tileX < maxX && tileY > 0) chunk.GetTile(tileX + 1, tileY - 1).vertexY[3] += delta_y;
-
-            if (_behaviourButtons[0, 1].value && tileX > 0)
-            {
-                chunk.GetTile(tileX - 1, tileY).vertexY[2] += delta_y;
-                chunk.GetTile(tileX - 1, tileY).vertexY[1] += delta_y;
-            }
-
-            if (_behaviourButtons[2, 1].value && tileX < maxX)
-            {
-                chunk.GetTile(tileX + 1, tileY).vertexY[0] += delta_y;
-                chunk.GetTile(tileX + 1, tileY).vertexY[3] += delta_y;
-            }
-
-            if (_behaviourButtons[0, 2].value && tileX > 0 && tileY < maxY) chunk.GetTile(tileX - 1, tileY + 1).vertexY[1] += delta_y;
-
-            if (_behaviourButtons[1, 2].value && tileY < maxY)
-            {
-                chunk.GetTile(tileX, tileY + 1).vertexY[0] += delta_y;
-                chunk.GetTile(tileX, tileY + 1).vertexY[1] += delta_y;
-            }
-
-            if (_behaviourButtons[2, 2].value && tileX < maxX && tileY < maxY) chunk.GetTile(tileX + 1, tileY + 1).vertexY[0] += delta_y;
-
-            TileData tile = chunk.GetTile(tileX, tileY);
-            tile.vertexY[0] += delta_y;
-            tile.vertexY[1] += delta_y;
-            tile.vertexY[2] += delta_y;
-            tile.vertexY[3] += delta_y;
         }
 
         public bool GetTileBehaviour(int x, int y)

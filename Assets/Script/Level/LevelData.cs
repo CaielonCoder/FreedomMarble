@@ -53,6 +53,11 @@ public class ChunkData
         return _tiles[y + x * _sizeY];
     }
 
+    public TileData GetTile(Vector2Int pos)
+    {
+        return GetTile(pos.x, pos.y);
+    }
+
     public void SetTile(TileData data, int x, int y)
     {
         _tiles[y + x * _sizeY] = data;
