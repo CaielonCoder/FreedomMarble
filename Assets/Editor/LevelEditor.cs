@@ -84,16 +84,13 @@ namespace LevelEditor
                     _selection = new Selection(_levelData, this);
                     _selection.SelectionEdited += OnSelectionEdited;
 
-                    // TODO: create custom component for manage the collision
-                   _levelCollider = _levelRenderer.gameObject.GetComponent<MeshCollider>();
-                    if (_levelCollider == null)
-                        _levelCollider = _levelRenderer.gameObject.AddComponent<MeshCollider>();
-                    _levelCollider.sharedMesh = _levelRenderer.GetFloorMesh();
+                    UpdateColliderMesh();
                 }
             }
             else
             {
                 if (_levelCollider != null) DestroyImmediate(_levelCollider);
+
                 _enabledButton.SetCheckedPseudoState(false);
                 _enabledButton.text = "Enable";
                 _editionEnabled = false;
@@ -143,6 +140,16 @@ namespace LevelEditor
             EditorUtility.SetDirty(_levelData);
             AssetDatabase.SaveAssets();
             _levelRenderer.OnDataUpdated();
+            UpdateColliderMesh();
+        }
+
+        private void UpdateColliderMesh()
+        {
+            // TODO: create custom component for manage the collision
+           _levelCollider = _levelRenderer.gameObject.GetComponent<MeshCollider>();
+            if (_levelCollider == null)
+                _levelCollider = _levelRenderer.gameObject.AddComponent<MeshCollider>();
+            _levelCollider.sharedMesh = _levelRenderer.GetFloorMesh();
         }
 
         private void HandleRepaint()
