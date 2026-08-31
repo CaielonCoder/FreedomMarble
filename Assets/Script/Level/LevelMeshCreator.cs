@@ -89,24 +89,20 @@ public class LevelMeshCreator : MonoBehaviour
     {
         ChunkData chunk = _data.Chunks[0];
         List<Vector3> vertices = new List<Vector3>();
-        List<Vector2> uv = new List<Vector2>();
         List<int> triangles = new List<int>();
 
         for (int x = 0; x < chunk.SizeX; x++)
         {
             for (int y = 0; y < chunk.SizeY; y++)
             {
-                CreateFrontWall(x, y, chunk, vertices, uv, triangles);
-                //CreateLeftWall(x, y, tiles, vertices, uv, triangles);
-                //CreateBackWall(x, y, tiles, vertices, uv, triangles);
-                CreateRightWall(x, y, chunk, vertices, uv, triangles);
+                CreateFrontWall(x, y, chunk, vertices, triangles);
+                CreateRightWall(x, y, chunk, vertices, triangles);
             }
         }
 
         if (!_wallMesh) _wallMesh = new Mesh();
         _wallMesh.triangles = null;
         _wallMesh.vertices = vertices.ToArray();
-        _wallMesh.uv = uv.ToArray();
         _wallMesh.triangles = triangles.ToArray();
 
         _wallMesh.RecalculateBounds();
@@ -115,7 +111,7 @@ public class LevelMeshCreator : MonoBehaviour
         _wallMeshFilter.mesh = _wallMesh;
     }
 
-    private void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector2> uv, List<int> triangles)
+    private void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
     {
         int delta1;
         int delta2;
@@ -141,10 +137,6 @@ public class LevelMeshCreator : MonoBehaviour
             vertices.Add(new Vector3(x,     chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y,      y + 1));
             vertices.Add(new Vector3(x,     (chunk.GetTile(x, y).vertexY[3] - delta2) * LevelData.STEP_Y, y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[2] - delta1) * LevelData.STEP_Y, y + 1));
-            uv.Add(new Vector2(0, 0));
-            uv.Add(new Vector2(1, 0));
-            uv.Add(new Vector2(1, 10));
-            uv.Add(new Vector2(0, 10));
 
             if (delta1 > 0)
             {
@@ -161,7 +153,7 @@ public class LevelMeshCreator : MonoBehaviour
         }
     }
 
-    private void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector2> uv, List<int> triangles)
+    private void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
     {
         int delta1;
         int delta2;
@@ -179,21 +171,26 @@ public class LevelMeshCreator : MonoBehaviour
 
         if (delta1 > 0 || delta2 > 0)
         {
+            if (delta1 < 0) delta1 = 0;
+            if (delta2 < 0) delta2 = 0;
+
             int startIndex = vertices.Count;
             vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[1] * LevelData.STEP_Y,      y));
             vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[2] * LevelData.STEP_Y,      y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[2] - delta2) * LevelData.STEP_Y, y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[1] - delta1) * LevelData.STEP_Y, y));
-            uv.Add(new Vector2(0, 0));
-            uv.Add(new Vector2(1, 0));
-            uv.Add(new Vector2(1, 10));
-            uv.Add(new Vector2(0, 10));
-            triangles.Add(startIndex);
-            triangles.Add(startIndex + 1);
-            triangles.Add(startIndex + 3);
-            triangles.Add(startIndex + 1);
-            triangles.Add(startIndex + 2);
-            triangles.Add(startIndex + 3);
+            if (delta1 > 0)
+            {
+                triangles.Add(startIndex);
+                triangles.Add(startIndex + 1);
+                triangles.Add(startIndex + 3);
+            }
+            if (delta2 > 0)
+            {
+                triangles.Add(startIndex + 1);
+                triangles.Add(startIndex + 2);
+                triangles.Add(startIndex + 3);
+            }
         }
     }
 #if UNITY_EDITOR
