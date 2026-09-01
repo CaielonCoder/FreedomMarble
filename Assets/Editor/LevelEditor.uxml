@@ -1,29 +1,42 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Editor/LevelEditor.uss?fileID=7433441132597879392&amp;guid=c0e8778791a782f4fafda55e70599f96&amp;type=3#LevelEditor"/>
     <ui:Button text="Enable" name="EnableButton"/>
-    <ui:VisualElement name="RootContainer" style="flex-grow: 1; flex-direction: column;">
-        <ui:VisualElement name="ChunkOperationsContainer" class="container" style="flex-direction: column; align-items: center; justify-content: center; align-content: auto; align-self: auto;">
-            <ui:Label text="Chunk" name="TileTitle" class="title"/>
-            <ui:VisualElement name="Buttons" style="flex-grow: 1; flex-direction: row; align-content: auto; align-self: auto; justify-content: center; align-items: center;">
-                <ui:Button text="Extend X" name="ChunkExtendXButton"/>
-                <ui:Button text="Reduce X" name="ChunkReduceXButton" style="background-color: rgb(192, 155, 155);"/>
-                <ui:Button text="Extend Z" name="ChunkExtendZButton"/>
-                <ui:Button text="Reduce Z" name="ChunkReduceZButton" style="background-color: rgb(192, 155, 155);"/>
+    <ui:TabView name="TabView">
+        <ui:Tab label="Chunks" name="ChunksTab">
+            <ui:VisualElement name="ChunkOperationsContainer" class="container" style="flex-direction: column; align-items: center; justify-content: center; align-content: auto; align-self: auto;">
+                <ui:Label text="Chunk" name="TileTitle" class="title"/>
+                <ui:VisualElement name="Buttons" style="flex-grow: 1; flex-direction: row; align-content: auto; align-self: auto; justify-content: center; align-items: center;">
+                    <ui:Button text="Extend X" name="ChunkExtendXButton"/>
+                    <ui:Button text="Reduce X" name="ChunkReduceXButton" style="background-color: rgb(192, 155, 155);"/>
+                    <ui:Button text="Extend Z" name="ChunkExtendZButton"/>
+                    <ui:Button text="Reduce Z" name="ChunkReduceZButton" style="background-color: rgb(192, 155, 155);"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="TileOperationsContainer" class="container">
-            <ui:Label text="Tile" name="TileTitle" class="title"/>
-            <ui:VisualElement name="BehaviourButtons" style="flex-grow: 1; width: 200px; flex-direction: row; flex-wrap: wrap; height: auto; justify-content: center; align-content: flex-start; max-width: 200px; min-width: 190px; margin-top: 10px;">
-                <ui:Toggle label="" name="TopLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="Top" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="TopRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="Left" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Button text="Face" name="Center" enabled="false" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="Right" enabled="true" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="BottomLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="Bottom" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                <ui:Toggle label="" name="BottomRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+        </ui:Tab>
+        <ui:Tab label="Tiles" name="TilesTab" style="flex-direction: column;">
+            <ui:VisualElement name="TileOperationsContainer" class="container" style="min-height: 250px;">
+                <ui:Label text="Tile" name="TileTitle" class="title"/>
+                <ui:VisualElement name="BehaviourButtons" style="flex-grow: 1; width: 200px; flex-direction: row; flex-wrap: wrap; height: auto; justify-content: center; align-content: flex-start; max-width: 200px; min-width: 190px; margin-top: 10px;">
+                    <ui:Toggle label="" name="TopLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="Top" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="TopRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="Left" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Button text="Face" name="Center" enabled="false" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="Right" enabled="true" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="BottomLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="Bottom" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="BottomRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
-    </ui:VisualElement>
+        </ui:Tab>
+        <ui:Tab label="Blockers" name="BlockersTab">
+            <ui:VisualElement name="BlockersContainer" class="container" style="flex-direction: column; align-items: center; justify-content: center; align-content: auto; align-self: auto;">
+                <ui:Label text="Blockers" name="TileTitle" class="title"/>
+                <ui:VisualElement name="Buttons" style="flex-grow: 1; flex-direction: row; align-content: auto; align-self: auto; justify-content: center; align-items: center;">
+                    <ui:Button text="Add Blocker" name="AddBlockerButton"/>
+                    <ui:Button text="Remove Blocker" name="RemoveBlockerButton" style="background-color: rgb(192, 155, 155);"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:Tab>
+    </ui:TabView>
 </ui:UXML>
