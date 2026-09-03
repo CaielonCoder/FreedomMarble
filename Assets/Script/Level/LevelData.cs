@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
@@ -27,6 +28,9 @@ public class ChunkData
     private int _sizeX = 4;
     [SerializeField]
     private int _sizeY = 4;
+
+    [SerializeField]
+    private List<BlockerData> _blockers = new List<BlockerData>();
 
     public void Resize(int newX, int newY)
     {
@@ -73,6 +77,22 @@ public class ChunkData
     {
         _tiles[y + x * _sizeY] = data;
     }
+
+    public int AddBlocker(BlockerData blocker)
+    {
+        _blockers.Add(blocker);
+        return _blockers.Count-1;
+    }
+
+    public BlockerData GetBlockerData(int index)
+    {
+        return _blockers[index]; 
+    }
+
+    public int GetBlockerCount()
+    {
+        return _blockers.Count; 
+    }
 }
 
 [System.Serializable]
@@ -91,4 +111,11 @@ public class TileData
         vertexY[2] = x2y2;
         vertexY[3] = x1y2;
     }
+}
+
+[System.Serializable]
+public class BlockerData
+{
+    public Vector2 StartPos;
+    public Vector2 EndPos;
 }

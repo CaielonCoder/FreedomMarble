@@ -7,6 +7,8 @@ namespace LevelEditor
 {
     public class LevelEditor : EditorWindow
     {
+        public const float HANDLES_Z_BIAS = 0.02f;
+
         [SerializeField]
         private VisualTreeAsset m_VisualTreeAsset = default;
         private TabView _rootTabView;
@@ -14,6 +16,7 @@ namespace LevelEditor
 
         private bool _editionEnabled = false;
         private LevelMeshCreator _levelRenderer;
+        private LevelBlockerCreator _levelBlockers;
         private MeshCollider _levelCollider;
         private LevelData _levelData;
 
@@ -56,9 +59,10 @@ namespace LevelEditor
             {
                 _rootTabView.visible = true;
                 _levelRenderer = FindAnyObjectByType<LevelMeshCreator>();
-                if (_levelRenderer == null)
+                _levelBlockers = FindAnyObjectByType<LevelBlockerCreator>();
+                if (_levelRenderer == null || _levelBlockers == null)
                 {
-                    EditorUtility.DisplayDialog("Level Error", "Level renderer not found", "OK");
+                    EditorUtility.DisplayDialog("Level Error", _levelRenderer ? "LevelBlockerCreator not found" : "LevelMeshCreator not found", "OK");
                 }
                 else
                 {
@@ -67,6 +71,7 @@ namespace LevelEditor
                     _editionEnabled = true;
                     _levelData = _levelRenderer.GetLevelData();
                     _levelRenderer.OnDataUpdated();
+                    _levelBlockers.OnDataUpdated();
 
                     _rootTabView.activeTabChanged += OnActiveTabChanged;
                     _currentMode = _rootTabView.selectedTabIndex;
@@ -103,6 +108,7 @@ namespace LevelEditor
         private void OnLevelDataChanged()
         {
             _levelRenderer.OnDataUpdated();
+            _levelBlockers.OnDataUpdated();
             UpdateColliderMesh();
             EditorUtility.SetDirty(_levelData);
         }
@@ -120,14 +126,6 @@ namespace LevelEditor
             if (_levelCollider == null)
                 _levelCollider = _levelRenderer.gameObject.AddComponent<MeshCollider>();
             _levelCollider.sharedMesh = _levelRenderer.GetFloorMesh();
-        }
-
-        private void OnSelectionEdited(Vector2Int minPos, Vector2Int maxPos, int delta_y)
-        {
-            _levelRenderer.OnDataUpdated();
-            _levelCollider.sharedMesh = null;
-            _levelCollider.sharedMesh = _levelRenderer.GetFloorMesh();
-            EditorUtility.SetDirty(_levelData);
         }
 
         private void OnEnable()

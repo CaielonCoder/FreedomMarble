@@ -6,16 +6,12 @@ namespace LevelEditor
 {
     public class LevelEditorTileMode : LevelEditorMode
     {
-        public const float HANDLES_Z_BIAS = 0.02f;
-
         private Toggle[,] _behaviourButtons = new Toggle[3, 3];
 
         private Vector3 _pointerPosition;
-        private const float MULTISELECT_MIN_DISTANCE = 0.1f;
         private bool _isMultiSelect;
         private Vector3 _multiSelectStartPos;
 
-        private LevelEditor _editor;
         private Vector2Int _minPos;
         private Vector2Int _maxPos;
         private bool isSomethinSelected = false;
@@ -119,10 +115,10 @@ namespace LevelEditor
                 {
                     TileData tile = chunk.GetTile(x, y);
                     Vector3[] verts = new Vector3[4];
-                    verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + HANDLES_Z_BIAS, y + squareMargin);
-                    verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + HANDLES_Z_BIAS, y + squareMargin);
-                    verts[2] = new Vector3(x + 1f - squareMargin, tile.vertexY[2] * LevelData.STEP_Y + HANDLES_Z_BIAS, y + 1 - squareMargin);
-                    verts[3] = new Vector3(x + squareMargin, tile.vertexY[3] * LevelData.STEP_Y + HANDLES_Z_BIAS, y + 1 - squareMargin);
+                    verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
+                    verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
+                    verts[2] = new Vector3(x + 1f - squareMargin, tile.vertexY[2] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
+                    verts[3] = new Vector3(x + squareMargin, tile.vertexY[3] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
                     Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
                     Handles.DrawSolidRectangleWithOutline(verts, Handles.color, Color.cyan);
                     Handles.zTest = UnityEngine.Rendering.CompareFunction.Greater;
@@ -316,10 +312,10 @@ namespace LevelEditor
         {
             TileData tile = _levelData.Chunks[0].GetTile(tileX, tileY);
             Vector3[] verts = new Vector3[4];
-            verts[0] = new Vector3(tileX, tile.vertexY[0] * LevelData.STEP_Y + HANDLES_Z_BIAS, tileY);
-            verts[1] = new Vector3(tileX + 1f, tile.vertexY[1] * LevelData.STEP_Y + HANDLES_Z_BIAS, tileY);
-            verts[2] = new Vector3(tileX + 1f, tile.vertexY[2] * LevelData.STEP_Y + HANDLES_Z_BIAS, tileY + 1);
-            verts[3] = new Vector3(tileX, tile.vertexY[3] * LevelData.STEP_Y + HANDLES_Z_BIAS, tileY + 1);
+            verts[0] = new Vector3(tileX, tile.vertexY[0] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, tileY);
+            verts[1] = new Vector3(tileX + 1f, tile.vertexY[1] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, tileY);
+            verts[2] = new Vector3(tileX + 1f, tile.vertexY[2] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, tileY + 1);
+            verts[3] = new Vector3(tileX, tile.vertexY[3] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, tileY + 1);
             Handles.DrawSolidRectangleWithOutline(verts, Handles.color, outlineColor);
         }
     }
