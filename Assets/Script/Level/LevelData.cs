@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelData", menuName = "Scriptable Objects/LevelData")]
@@ -13,6 +15,21 @@ public class LevelData : ScriptableObject
         Chunks = new ChunkData[1];
         Chunks[0] = new ChunkData();
     }
+
+    public float GetHeightAt(Vector2 position)
+    {
+        return GetHeightAt(position.x, position.y);
+    }
+
+    public float GetHeightAt(float x, float y)
+    {
+        ChunkData chunk = Chunks[0];
+        int xx = Mathf.FloorToInt(x);
+        int yy = Mathf.FloorToInt(y);
+        TileData tile = chunk.GetTile(xx, yy);
+        return tile.GetHeightAt(x - xx, y - yy);
+    }
+
 }
 
 [System.Serializable]
@@ -110,6 +127,13 @@ public class TileData
         vertexY[1] = x2y1;
         vertexY[2] = x2y2;
         vertexY[3] = x1y2;
+    }
+
+    internal float GetHeightAt(float x, float y)
+    {
+        float lerpX1 = Mathf.Lerp(vertexY[0] * LevelData.STEP_Y, vertexY[1] * LevelData.STEP_Y, x);
+        float lerpX2 = Mathf.Lerp(vertexY[3] * LevelData.STEP_Y, vertexY[2] * LevelData.STEP_Y, x);
+        return Mathf.Lerp(lerpX1, lerpX2, y);
     }
 }
 

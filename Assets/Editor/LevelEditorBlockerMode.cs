@@ -101,6 +101,8 @@ namespace LevelEditor
             if (hit != null)
             {
                 _pointerPosition = ((RaycastHit)hit).point;
+                CalculateSnap();
+
                 view.Repaint();
             }
             else
@@ -109,10 +111,25 @@ namespace LevelEditor
             }
         }
 
+        private void CalculateSnap()
+        {
+            int x = Mathf.RoundToInt(_pointerPosition.x);
+            int y = Mathf.RoundToInt(_pointerPosition.z);
+
+            float SNAP_DISTANCE = 0.15f;
+
+            if (Utils.DistanceSqrt(x, y, _pointerPosition.x, _pointerPosition.z) < SNAP_DISTANCE * SNAP_DISTANCE)
+            {
+                _pointerPosition.x = x;
+                _pointerPosition.z = y;
+            }
+        }
+
         private void HandleMouseDown(SceneView view)
         {
             if (Event.current.button == 0)
             {
+                CalculateSnap();
                 _startDragPos = _pointerPosition;
                 _currentBlocker = new BlockerData();
                 _currentBlocker.StartPos = _pointerPosition.XZ();
@@ -132,6 +149,7 @@ namespace LevelEditor
                 if (hit != null)
                 {
                     _pointerPosition = ((RaycastHit)hit).point;
+                    CalculateSnap();
                     _currentBlocker.EndPos = _pointerPosition.XZ();
                     RaiseLevelDataChanged();
                 }
