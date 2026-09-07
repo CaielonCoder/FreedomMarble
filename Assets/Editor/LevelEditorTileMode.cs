@@ -133,10 +133,9 @@ namespace LevelEditor
             if (Event.current.button == 0)
             {
                 Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-                object hit = HandleUtility.RaySnap(ray);
-                if (hit != null)
+                if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
                 {
-                    _pointerPosition = ((RaycastHit)hit).point;
+                    _pointerPosition = hit.point;
                     _isMultiSelect = true;
                     UpdateMultiSelect(_multiSelectStartPos, _pointerPosition);
                 }
@@ -147,10 +146,9 @@ namespace LevelEditor
         private void HandleMouseMove(SceneView view)
         {
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-            object hit = HandleUtility.RaySnap(ray);
-            if (hit != null)
+            if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
             {
-                _pointerPosition = ((RaycastHit)hit).point;
+                _pointerPosition = hit.point;
                 view.Repaint();
             }
             else

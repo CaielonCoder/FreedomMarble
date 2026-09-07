@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 
 public class Blocker : MonoBehaviour
@@ -13,7 +14,9 @@ public class Blocker : MonoBehaviour
 
         if (Vector3.Distance(startPos, endPos) > 0.1)
         {
-            CreateMesh(meshFilter.sharedMesh, CalculatePoints(startPos, endPos, levelData));
+            List<Vector3> points = CalculatePoints(startPos, endPos, levelData);
+            CreateMesh(meshFilter.sharedMesh, points);
+            CreateColliders(points);
         }
     }
 
@@ -84,7 +87,16 @@ public class Blocker : MonoBehaviour
         points.Insert(0, startPos);
         points.Add(endPos);
 
-        return points;
+        // Remove points too close
+        List<Vector3> pointsPurged = new List<Vector3>();
+        for (int i = 0; i < points.Count - 1; i++)
+        {
+            if (!Mathf.Approximately(Vector3.Distance(points[i], points[i + 1]), 0f))
+                pointsPurged.Add(points[i]);
+        }
+
+        pointsPurged.Add(points[points.Count - 1]);
+        return pointsPurged;
     }
 
     private void CreateMesh(Mesh mesh, List<Vector3> points)
@@ -95,25 +107,22 @@ public class Blocker : MonoBehaviour
         float size = 0.1f;
         float height = 0.4f;
 
-        int index = 1;
-        while (Mathf.Approximately(Vector3.Distance(points[index - 1], points[index]), 0f)) index++;
 
-        Vector3 forward = (points[index] - points[index - 1]).normalized;
+        Vector3 forward = (points[1] - points[0]).normalized;
         Vector3 right = new Vector3(forward.z, 0, -forward.x);
 
-        vertices.Add(points[index - 1] + right * size);
-        vertices.Add(points[index - 1] - right * size);
-        vertices.Add(points[index - 1] + right * size + Vector3.up * height);
-        vertices.Add(points[index - 1] - right * size + Vector3.up * height);
+        vertices.Add(points[0] + right * size);
+        vertices.Add(points[0] - right * size);
+        vertices.Add(points[0] + right * size + Vector3.up * height);
+        vertices.Add(points[0] - right * size + Vector3.up * height);
 
         // start cap face
         triangles.Add(0); triangles.Add(1); triangles.Add(2);
         triangles.Add(1); triangles.Add(3); triangles.Add(2);
 
-        for (; index < points.Count; index++)
+        for (int i = 1; i < points.Count; i++)
         {
-            if (!Mathf.Approximately(Vector3.Distance(points[index - 1], points[index]), 0f))
-                AddMeshPoint(points[index-1], points[index], vertices, triangles, size, height);
+            AddMeshPoint(points[i-1], points[i], vertices, triangles, size, height);
         }
 
         // end cap face
@@ -125,6 +134,43 @@ public class Blocker : MonoBehaviour
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
+    }
+
+    private void CreateColliders(List<Vector3> points)
+    {
+        Transform collidersRoot = transform.Find("Colliders");
+        if (collidersRoot == null)
+        {
+            GameObject go = new GameObject("Colliders");
+            go.transform.parent = transform;
+            go.transform.localPosition = Vector3.zero;
+            collidersRoot = go.transform;
+        }
+
+        int countDiff = points.Count - 1 - collidersRoot.childCount;
+        for (int i = 0; i < countDiff; i++)
+        {
+            GameObject go = new GameObject("Box");
+            Transform colT = go.transform;
+            colT.transform.parent = collidersRoot;
+            go.AddComponent<BoxCollider>();
+        }
+        int index = 0;
+        for (; index < points.Count - 1; index++)
+        {
+            Transform colT = collidersRoot.GetChild(index);
+            Vector3 diff = points[index + 1] - points[index];
+            colT.position = points[index] + Vector3.up * 0.3f;
+            colT.rotation = Quaternion.LookRotation(diff);
+            BoxCollider col = colT.GetComponent<BoxCollider>();
+            col.size = new Vector3(0.2f, 0.2f, diff.magnitude);
+            col.center = new Vector3(0f, 0f, diff.magnitude * 0.5f);
+        }
+        while (index < collidersRoot.childCount)
+        {
+            DestroyImmediate(collidersRoot.GetChild(index).gameObject);
+            index++;
+        }
     }
 
     private void AddMeshPoint(Vector3 prevPoint, Vector3 point, List<Vector3> vertices, List<int> triangles, float size, float height)

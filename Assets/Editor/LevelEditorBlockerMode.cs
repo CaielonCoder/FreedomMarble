@@ -67,59 +67,51 @@ namespace LevelEditor
         {
             if (_pointerPosition != Vector3.zero)
             {
-                if (mode == Mode.Adding)
+                switch (mode)
                 {
-                    Handles.DrawWireCube(_pointerPosition + Vector3.up * 0.3f, new Vector3(0.2f, 0.6f, 0.2f));
-                    /*/
-                                    float squareMargin = 0f;
-                                    ChunkData chunk = _levelData.Chunks[0];
-                                    Handles.color = new Color(0f, 1f, 0.8f, 0.3f);
-                                    int x = Mathf.FloorToInt(_pointerPosition.x);
-                                    int y = Mathf.FloorToInt(_pointerPosition.z);
-                                    if (x >= 0 && x < chunk.SizeX && y >= 0 && y < chunk.SizeY)
-                                    {
-                                        TileData tile = chunk.GetTile(x, y);
-                                        Vector3[] verts = new Vector3[4];
-                                        verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
-                                        verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
-                                        verts[2] = new Vector3(x + 1f - squareMargin, tile.vertexY[2] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
-                                        verts[3] = new Vector3(x + squareMargin, tile.vertexY[3] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
-                                        Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
-                                        Handles.DrawSolidRectangleWithOutline(verts, Handles.color, Color.cyan);
-                                        Handles.zTest = UnityEngine.Rendering.CompareFunction.Greater;
-                                        Handles.DrawSolidRectangleWithOutline(verts, Handles.color * 0.3f, Color.cyan);
-                                    }
-                    /*/
+                    case Mode.Adding:
+                        Handles.DrawWireCube(_pointerPosition + Vector3.up * 0.3f, new Vector3(0.2f, 0.6f, 0.2f));
+                        break;
                 }
             }
         }
 
         private void HandleMouseMove(SceneView view)
         {
-            Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-            object hit = HandleUtility.RaySnap(ray);
-            if (hit != null)
+            switch (mode)
             {
-                _pointerPosition = ((RaycastHit)hit).point;
-                CalculateSnap();
+                case Mode.Adding:
+                    Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                    if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
+                    {
+                        _pointerPosition = hit.point;
+                        CalculateSnap();
 
-                view.Repaint();
-            }
-            else
-            {
-                _pointerPosition = Vector3.zero;
+                        view.Repaint();
+                    }
+                    else
+                    {
+                        _pointerPosition = Vector3.zero;
+                    }
+                    break;
             }
         }
 
         private void CalculateSnap()
         {
-            int x = Mathf.RoundToInt(_pointerPosition.x);
-            int y = Mathf.RoundToInt(_pointerPosition.z);
+            float x = Mathf.Round(_pointerPosition.x);
+            float y = Mathf.Round(_pointerPosition.z);
 
-            float SNAP_DISTANCE = 0.15f;
+            float SNAP_DISTANCE = 0.2f;
 
             if (Utils.DistanceSqrt(x, y, _pointerPosition.x, _pointerPosition.z) < SNAP_DISTANCE * SNAP_DISTANCE)
             {
+                if (x - _pointerPosition.x > 0) x -= 0.1f;
+                else x += 0.1f;
+
+                if (y - _pointerPosition.z > 0) y -= 0.1f;
+                else y += 0.1f;
+
                 _pointerPosition.x = x;
                 _pointerPosition.z = y;
             }
@@ -129,14 +121,19 @@ namespace LevelEditor
         {
             if (Event.current.button == 0)
             {
-                CalculateSnap();
-                _startDragPos = _pointerPosition;
-                _currentBlocker = new BlockerData();
-                _currentBlocker.StartPos = _pointerPosition.XZ();
-                _currentBlocker.EndPos = _pointerPosition.XZ();
-                _levelData.Chunks[0].AddBlocker(_currentBlocker);
-                RaiseLevelDataChanged();
-                Event.current.Use();
+                switch (mode)
+                {
+                    case Mode.Adding:
+                        CalculateSnap();
+                        _startDragPos = _pointerPosition;
+                        _currentBlocker = new BlockerData();
+                        _currentBlocker.StartPos = _pointerPosition.XZ();
+                        _currentBlocker.EndPos = _pointerPosition.XZ();
+                        _levelData.Chunks[0].AddBlocker(_currentBlocker);
+                        RaiseLevelDataChanged();
+                        Event.current.Use();
+                        break;
+                }
             }
         }
 
@@ -144,16 +141,20 @@ namespace LevelEditor
         {
             if (Event.current.button == 0)
             {
-                Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-                object hit = HandleUtility.RaySnap(ray);
-                if (hit != null)
+                switch (mode)
                 {
-                    _pointerPosition = ((RaycastHit)hit).point;
-                    CalculateSnap();
-                    _currentBlocker.EndPos = _pointerPosition.XZ();
-                    RaiseLevelDataChanged();
+                    case Mode.Adding:
+                        Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                        if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
+                        {
+                            _pointerPosition = hit.point;
+                            CalculateSnap();
+                            _currentBlocker.EndPos = _pointerPosition.XZ();
+                            RaiseLevelDataChanged();
+                        }
+                        view.Repaint();
+                        break;
                 }
-                view.Repaint();
             }
         }
 
