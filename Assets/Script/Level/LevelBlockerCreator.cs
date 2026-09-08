@@ -33,7 +33,7 @@ public class LevelBlockerCreator : MonoBehaviour
             {
                 blocker = Instantiate(_blockerPrefab);
             }
-            blocker.SetData(chunkData.GetBlockerData(i), _data);
+            blocker.SetData(_data, i);
             blocker.transform.parent = _blockersRoot;
             blocker.transform.localPosition = Vector3.zero;
         }

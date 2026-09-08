@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
 
 public class Blocker : MonoBehaviour
 {
-    public void SetData(BlockerData data, LevelData levelData)
+    public int DataIndex { get; private set; }
+
+    public void SetData(LevelData levelData, int dataIndex)
     {
+        DataIndex = dataIndex;
+        BlockerData data = levelData.Chunks[0].GetBlockerData(DataIndex);
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         meshFilter.sharedMesh = new Mesh();
 
@@ -151,6 +156,7 @@ public class Blocker : MonoBehaviour
         for (int i = 0; i < countDiff; i++)
         {
             GameObject go = new GameObject("Box");
+            go.layer = gameObject.layer;
             Transform colT = go.transform;
             colT.transform.parent = collidersRoot;
             go.AddComponent<BoxCollider>();

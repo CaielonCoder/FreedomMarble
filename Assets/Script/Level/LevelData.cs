@@ -101,6 +101,11 @@ public class ChunkData
         return _blockers.Count-1;
     }
 
+    public void RemoveBlocker(int blockerIndex)
+    {
+        _blockers.RemoveAt(blockerIndex);
+    }
+
     public BlockerData GetBlockerData(int index)
     {
         return _blockers[index]; 

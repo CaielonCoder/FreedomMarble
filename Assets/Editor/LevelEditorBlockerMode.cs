@@ -19,9 +19,11 @@ namespace LevelEditor
         private Button _addButton;
         private Button _removeButton;
 
-        private BlockerData _currentBlocker;
+        private BlockerData _currentBlockerData;
+        private Blocker _blockerToRemove;
         private Vector3 _pointerPosition;
-        private Vector3 _startDragPos;
+
+        private Material _selectedBlockerMat;
 
         public override void CreateGUI(VisualElement root)
         {
@@ -30,6 +32,8 @@ namespace LevelEditor
 
             _addButton.clicked += OnAddButtonClicked;
             _removeButton.clicked += OnRemoveButtonClicked;
+
+            _selectedBlockerMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Editor/BlockerSelectedMaterial.mat");
         }
 
         public override void Enter(LevelData levelData)
@@ -65,24 +69,33 @@ namespace LevelEditor
 
         private void HandleRepaint()
         {
-            if (_pointerPosition != Vector3.zero)
+            switch (mode)
             {
-                switch (mode)
-                {
-                    case Mode.Adding:
+                case Mode.Adding:
+                    if (_pointerPosition != Vector3.zero)
+                    {
                         Handles.DrawWireCube(_pointerPosition + Vector3.up * 0.3f, new Vector3(0.2f, 0.6f, 0.2f));
-                        break;
-                }
+                    }
+                    break;
+                case Mode.Removing:
+                    if (_blockerToRemove)
+                    {
+                        _selectedBlockerMat.SetPass(0);
+                        Graphics.DrawMeshNow(_blockerToRemove.GetComponent<MeshFilter>().sharedMesh, Matrix4x4.identity);
+                    }
+                    break;
             }
         }
 
         private void HandleMouseMove(SceneView view)
         {
+            Ray ray;
+            RaycastHit hit;
             switch (mode)
             {
                 case Mode.Adding:
-                    Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-                    if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
+                    ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                    if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Level")))
                     {
                         _pointerPosition = hit.point;
                         CalculateSnap();
@@ -92,6 +105,22 @@ namespace LevelEditor
                     else
                     {
                         _pointerPosition = Vector3.zero;
+                    }
+                    break;
+                case Mode.Removing:
+                    ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                    if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Blocker")))
+                    {
+                        _blockerToRemove = hit.collider.transform.parent.parent.GetComponent<Blocker>();
+                        view.Repaint();
+                    }
+                    else
+                    {
+                        if (_blockerToRemove != null)
+                        {
+                            _blockerToRemove = null;
+                            view.Repaint();
+                        }
                     }
                     break;
             }
@@ -125,11 +154,16 @@ namespace LevelEditor
                 {
                     case Mode.Adding:
                         CalculateSnap();
-                        _startDragPos = _pointerPosition;
-                        _currentBlocker = new BlockerData();
-                        _currentBlocker.StartPos = _pointerPosition.XZ();
-                        _currentBlocker.EndPos = _pointerPosition.XZ();
-                        _levelData.Chunks[0].AddBlocker(_currentBlocker);
+                        _currentBlockerData = new BlockerData();
+                        _currentBlockerData.StartPos = _pointerPosition.XZ();
+                        _currentBlockerData.EndPos = _pointerPosition.XZ();
+                        _levelData.Chunks[0].AddBlocker(_currentBlockerData);
+                        RaiseLevelDataChanged();
+                        Event.current.Use();
+                        break;
+                    case Mode.Removing:
+                        _levelData.Chunks[0].RemoveBlocker(_blockerToRemove.DataIndex);
+                        GameObject.DestroyImmediate(_blockerToRemove.gameObject);
                         RaiseLevelDataChanged();
                         Event.current.Use();
                         break;
@@ -149,7 +183,7 @@ namespace LevelEditor
                         {
                             _pointerPosition = hit.point;
                             CalculateSnap();
-                            _currentBlocker.EndPos = _pointerPosition.XZ();
+                            _currentBlockerData.EndPos = _pointerPosition.XZ();
                             RaiseLevelDataChanged();
                         }
                         view.Repaint();
@@ -160,7 +194,7 @@ namespace LevelEditor
 
         private void HandleMouseUp(SceneView view)
         {
-            _currentBlocker = null;
+            _currentBlockerData = null;
         }
 
         private void OnAddButtonClicked()

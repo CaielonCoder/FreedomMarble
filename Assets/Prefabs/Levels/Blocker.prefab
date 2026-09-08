@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5229580907927830667}
   - component: {fileID: 1627817540320158665}
   - component: {fileID: 2498118687723439746}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -1255982633427224767, guid: 4ce88f78a53a3614fa554c482f63594f, type: 3}
+  - {fileID: 2100000, guid: 84dc7c6c46329e346a4cdb87dc4f6bbc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
