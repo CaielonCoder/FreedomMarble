@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TreeEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Blocker : MonoBehaviour
@@ -106,39 +107,39 @@ public class Blocker : MonoBehaviour
 
     private void CreateMesh(Mesh mesh, List<Vector3> points)
     {
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
+        float radius = 0.11f;
+        float height = 0.3f;
+        int cornerFaces = 4;
 
-        float size = 0.1f;
-        float height = 0.4f;
+        Vector3 yOffset = Vector3.up * height;
 
+        Vector3 tempStart = points[0] + Vector3.up * (height - radius);
+        Vector3 tempEnd = points[points.Count-1] + Vector3.up * (height - radius);
 
-        Vector3 forward = (points[1] - points[0]).normalized;
-        Vector3 right = new Vector3(forward.z, 0, -forward.x);
+        Vector3 unionForward = points[1] - points[0];
+        unionForward.y = 0;
 
-        vertices.Add(points[0] + right * size);
-        vertices.Add(points[0] - right * size);
-        vertices.Add(points[0] + right * size + Vector3.up * height);
-        vertices.Add(points[0] - right * size + Vector3.up * height);
+        MeshUtils.AddCylinder(mesh, points[0], tempStart, radius, Vector3.up);
 
-        // start cap face
-        triangles.Add(0); triangles.Add(1); triangles.Add(2);
-        triangles.Add(1); triangles.Add(3); triangles.Add(2);
+        Vector3 endPoint = points[points.Count - 1];
+        points[0] += (points[1] - points[0]).normalized * radius;
+        points[points.Count-1] += (points[points.Count-2] - points[points.Count-1]).normalized * radius;
 
-        for (int i = 1; i < points.Count; i++)
+        MeshUtils.AddCylinderUnion(mesh, tempStart, Vector3.up, points[0] + yOffset, unionForward, radius);
+
+        for (int i = 0; i < points.Count - 1; i++)
         {
-            AddMeshPoint(points[i-1], points[i], vertices, triangles, size, height);
+            Vector3 forward = points[i+1] - points[i];
+            forward.y = 0;
+            MeshUtils.AddCylinder(mesh, points[i] + yOffset, points[i+1] + yOffset, radius, forward);
         }
 
-        // end cap face
-        int vertexIndex = vertices.Count;
-        triangles.Add(vertexIndex - 3); triangles.Add(vertexIndex - 4); triangles.Add(vertexIndex - 2);
-        triangles.Add(vertexIndex - 3); triangles.Add(vertexIndex - 2); triangles.Add(vertexIndex - 1);
+        unionForward = tempEnd - points[points.Count-1];
+        unionForward.y = 0;
+        MeshUtils.AddCylinderUnion(mesh, points[points.Count-1] + yOffset, unionForward, tempEnd, Vector3.down, radius);
+        MeshUtils.AddCylinder(mesh, endPoint, endPoint + Vector3.up * (height - radius), radius, Vector3.up);
 
-        mesh.triangles = null;
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
     }
 
     private void CreateColliders(List<Vector3> points)
