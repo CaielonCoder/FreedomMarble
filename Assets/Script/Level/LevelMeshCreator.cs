@@ -24,10 +24,9 @@ public class LevelMeshCreator : MonoBehaviour
     {
         ChunkData chunk = _data.Chunks[0];
         int vertexCount = chunk.SizeX * chunk.SizeY * 4;
-        Vector3[] vertices = new Vector3[vertexCount];
-        Vector3[] normals = new Vector3[vertexCount];
-        Vector2[] uv = new Vector2[vertexCount];
-        int[] triangles = new int[(vertexCount * 3) / 2];
+        List<Vector3> vertices = new List<Vector3>();
+        List<Vector3> normals = new List<Vector3>();
+        List<int> triangles = new List<int>();
 
         Vector2Int chunkSize = new Vector2Int(chunk.SizeX, chunk.SizeY);
 
@@ -35,52 +34,36 @@ public class LevelMeshCreator : MonoBehaviour
         {
             for (int y = 0; y < chunkSize.y; y++)
             {
-                int vertexIndex = (y + x * chunkSize.y) * 4;
-                int triangleIndex = (y + x * chunkSize.y) * 6;
+                if (!chunk.GetTile(x, y).active) continue;
 
-                vertices[vertexIndex].x = x;
-                vertices[vertexIndex].y = chunk.GetTile(x, y).vertexY[0] * LevelData.STEP_Y;
-                vertices[vertexIndex].z = y;
-                normals[vertexIndex] = Vector3.up;
-                uv[vertexIndex].x = 0;
-                uv[vertexIndex].y = 0;
+                int vertexIndex = vertices.Count;
 
-                vertices[vertexIndex + 1].x = x + 1;
-                vertices[vertexIndex + 1].y = chunk.GetTile(x, y).vertexY[1] * LevelData.STEP_Y;
-                vertices[vertexIndex + 1].z = y;
-                normals[vertexIndex + 1] = Vector3.up;
-                uv[vertexIndex + 1].x = 1;
-                uv[vertexIndex + 1].y = 0;
+                vertices.Add(new Vector3(x, chunk.GetTile(x, y).vertexY[0] * LevelData.STEP_Y, y));
+                normals.Add(Vector3.up);
 
-                vertices[vertexIndex + 2].x = x + 1;
-                vertices[vertexIndex + 2].y = chunk.GetTile(x, y).vertexY[2] * LevelData.STEP_Y;
-                vertices[vertexIndex + 2].z = y + 1;
-                normals[vertexIndex + 2] = Vector3.up;
-                uv[vertexIndex + 2].x = 1;
-                uv[vertexIndex + 2].y = 1;
+                vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[1] * LevelData.STEP_Y, y));
+                normals.Add(Vector3.up);
 
-                vertices[vertexIndex + 3].x = x;
-                vertices[vertexIndex + 3].y = chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y;
-                vertices[vertexIndex + 3].z = y + 1;
-                normals[vertexIndex + 3] = Vector3.up;
-                uv[vertexIndex + 3].x = 0;
-                uv[vertexIndex + 3].y = 1;
+                vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[2] * LevelData.STEP_Y, y + 1));
+                normals.Add(Vector3.up);
 
-                triangles[triangleIndex] = vertexIndex;
-                triangles[triangleIndex + 1] = vertexIndex + 2;
-                triangles[triangleIndex + 2] = vertexIndex + 1;
-                triangles[triangleIndex + 3] = vertexIndex;
-                triangles[triangleIndex + 4] = vertexIndex + 3;
-                triangles[triangleIndex + 5] = vertexIndex + 2;
+                vertices.Add(new Vector3(x, chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y, y + 1));
+                normals.Add(Vector3.up);
+
+                triangles.Add(vertexIndex);
+                triangles.Add(vertexIndex + 2);
+                triangles.Add(vertexIndex + 1);
+                triangles.Add(vertexIndex);
+                triangles.Add(vertexIndex + 3);
+                triangles.Add(vertexIndex + 2);
             }
         }
 
         if (!_floorMesh) _floorMesh = new Mesh();
         _floorMesh.triangles = null;
-        _floorMesh.vertices = vertices;
-        _floorMesh.normals = normals;
-        _floorMesh.uv = uv;
-        _floorMesh.triangles = triangles;
+        _floorMesh.vertices = vertices.ToArray();
+        _floorMesh.normals = normals.ToArray();
+        _floorMesh.triangles = triangles.ToArray();
 
         _floorMeshFilter.mesh = _floorMesh;
     }
@@ -113,10 +96,12 @@ public class LevelMeshCreator : MonoBehaviour
 
     private void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
     {
+        if (!chunk.GetTile(x, y).active) return;
+
         int delta1;
         int delta2;
 
-        if (y < chunk.SizeY - 1)
+        if (y < chunk.SizeY - 1 && chunk.GetTile(x, y+1).active)
         {
             delta1 = chunk.GetTile(x, y).vertexY[2] - chunk.GetTile(x, y + 1).vertexY[1];
             delta2 = chunk.GetTile(x, y).vertexY[3] - chunk.GetTile(x, y + 1).vertexY[0];
@@ -155,10 +140,12 @@ public class LevelMeshCreator : MonoBehaviour
 
     private void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
     {
+        if (!chunk.GetTile(x, y).active) return;
+
         int delta1;
         int delta2;
 
-        if (x < chunk.SizeX - 1)
+        if (x < chunk.SizeX - 1 && chunk.GetTile(x+1, y).active)
         {
             delta1 = chunk.GetTile(x, y).vertexY[1] - chunk.GetTile(x + 1, y).vertexY[0];
             delta2 = chunk.GetTile(x, y).vertexY[2] - chunk.GetTile(x + 1, y).vertexY[3];

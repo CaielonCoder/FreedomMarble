@@ -14,8 +14,8 @@
             </ui:VisualElement>
         </ui:Tab>
         <ui:Tab label="Tiles" name="TilesTab" style="flex-direction: column;">
+            <ui:Button text="Remove Tiles" name="RemoveTilesButton"/>
             <ui:VisualElement name="TileOperationsContainer" class="container" style="min-height: 250px;">
-                <ui:Label text="Tile" name="TileTitle" class="title"/>
                 <ui:VisualElement name="BehaviourButtons" style="flex-grow: 1; width: 200px; flex-direction: row; flex-wrap: wrap; height: auto; justify-content: center; align-content: flex-start; max-width: 200px; min-width: 190px; margin-top: 10px;">
                     <ui:Toggle label="" name="TopLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                     <ui:Toggle label="" name="Top" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>

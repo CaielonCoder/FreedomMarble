@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,6 +7,7 @@ namespace LevelEditor
 {
     public class LevelEditorTileMode : LevelEditorMode
     {
+        private Button _removeButton;
         private Toggle[,] _behaviourButtons = new Toggle[3, 3];
 
         private Vector3 _pointerPosition;
@@ -17,7 +19,10 @@ namespace LevelEditor
         private bool isSomethinSelected = false;
 
         public override void CreateGUI(VisualElement root) 
-        { 
+        {
+            _removeButton = root.Q<Button>("RemoveTilesButton");
+            _removeButton.clicked += OnRemoveButtonClicked;
+
             _behaviourButtons[0, 0] = root.Q<Toggle>("TopLeft");
             _behaviourButtons[1, 0] = root.Q<Toggle>("Top");
             _behaviourButtons[2, 0] = root.Q<Toggle>("TopRight");
@@ -35,6 +40,18 @@ namespace LevelEditor
 
         public override void Exit()
         {
+        }
+
+        private void OnRemoveButtonClicked()
+        {
+            for (int x = _minPos.x; x <= _maxPos.x; x++)
+            {
+                for (int y = _minPos.y; y <= _maxPos.y; y++)
+                {
+                    _levelData.Chunks[0].GetTile(x, y).active = false;
+                }
+            }
+            RaiseLevelDataChanged();
         }
 
         public override void OnSceneGUI(SceneView view)

@@ -120,18 +120,20 @@ public class ChunkData
 [System.Serializable]
 public class TileData
 {
+    public bool active = true;
     public int[] vertexY = new int[4]; // 0 = min X, min Y ; 1 = max X, min Y ; 2 = max X, max Y ; 3 = min X, max Y
 
     public TileData() : this(0, 0, 0, 0) { }
-    public TileData(TileData other) : this(other.vertexY[0], other.vertexY[1], other.vertexY[2], other.vertexY[3]) { }
+    public TileData(TileData other) : this(other.vertexY[0], other.vertexY[1], other.vertexY[2], other.vertexY[3], other.active) { }
 
-    public TileData(int x1y1, int x2y1, int x2y2, int x1y2)
+    public TileData(int x1y1, int x2y1, int x2y2, int x1y2, bool a = true)
     {
         vertexY = new int[4];
         vertexY[0] = x1y1;
         vertexY[1] = x2y1;
         vertexY[2] = x2y2;
         vertexY[3] = x1y2;
+        active = a;
     }
 
     internal float GetHeightAt(float x, float y)
