@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -7,15 +8,25 @@ namespace LevelEditor
 {
     public class LevelEditorTileMode : LevelEditorMode
     {
+        private struct PointerData
+        {
+            public Vector3 position;
+            public bool isHoverTile;
+            public int tileX;
+            public int tileY;
+            public TileData tileData;
+        }
+
+        private PointerData _pointerData;
+
         private Button _removeButton;
         private Toggle[,] _behaviourButtons = new Toggle[3, 3];
 
-        private Vector3 _pointerPosition;
+
         private bool _isMultiSelect;
         private Vector3 _multiSelectStartPos;
-
-        private Vector2Int _minPos;
-        private Vector2Int _maxPos;
+        private Vector2Int _minSelectionPos;
+        private Vector2Int _maxSelectionPos;
         private bool isSomethinSelected = false;
 
         public override void CreateGUI(VisualElement root) 
@@ -44,9 +55,9 @@ namespace LevelEditor
 
         private void OnRemoveButtonClicked()
         {
-            for (int x = _minPos.x; x <= _maxPos.x; x++)
+            for (int x = _minSelectionPos.x; x <= _maxSelectionPos.x; x++)
             {
-                for (int y = _minPos.y; y <= _maxPos.y; y++)
+                for (int y = _minSelectionPos.y; y <= _maxSelectionPos.y; y++)
                 {
                     _levelData.Chunks[0].GetTile(x, y).active = false;
                 }
@@ -82,12 +93,12 @@ namespace LevelEditor
             if (!isSomethinSelected) return;
 
             ChunkData chunk = _levelData.Chunks[0];
-            TileData tile = chunk.GetTile(Mathf.FloorToInt((_minPos.x + _maxPos.x + 1) / 2f), Mathf.FloorToInt((_minPos.y + _maxPos.y + 1) / 2f));
+            TileData tile = chunk.GetTile(Mathf.FloorToInt((_minSelectionPos.x + _maxSelectionPos.x + 1) / 2f), Mathf.FloorToInt((_minSelectionPos.y + _maxSelectionPos.y + 1) / 2f));
 
             float centerY = tile.vertexY[0];
             float q = 1;
-            bool oddX = (_minPos.x + _maxPos.x) % 2 == 0;
-            bool oddY = (_minPos.y + _maxPos.y) % 2 == 0;
+            bool oddX = (_minSelectionPos.x + _maxSelectionPos.x) % 2 == 0;
+            bool oddY = (_minSelectionPos.y + _maxSelectionPos.y) % 2 == 0;
             if (oddX)
             {
                 centerY += tile.vertexY[1];
@@ -104,7 +115,9 @@ namespace LevelEditor
                 q++;
             }
 
-            Vector3 center = new Vector3((_minPos.x + _maxPos.x+1) / 2f, centerY * LevelData.STEP_Y / q, (_minPos.y + _maxPos.y+1) / 2f);
+            Vector3 center = new Vector3((_minSelectionPos.x + _maxSelectionPos.x+1) / 2f, 
+                centerY * LevelData.STEP_Y / q, 
+                (_minSelectionPos.y + _maxSelectionPos.y+1) / 2f);
 
             Handles.color = Handles.yAxisColor;
 
@@ -113,34 +126,31 @@ namespace LevelEditor
             if (EditorGUI.EndChangeCheck())
             {
                 int delta_y = Mathf.RoundToInt((newCenter.y - center.y) / LevelData.STEP_Y);
-                UpdateVertices(_minPos, _maxPos, delta_y);
+                UpdateVertices(_minSelectionPos, _maxSelectionPos, delta_y);
                 RaiseLevelDataChanged();
             }
         }
 
         private void HandleRepaint()
         {
-            if (_pointerPosition != Vector3.zero)
+            if (_pointerData.isHoverTile)
             {
-                float squareMargin = 0f;
 
-                ChunkData chunk = _levelData.Chunks[0];
-                Handles.color = new Color(0f, 1f, 0.8f, 0.3f);
-                int x = Mathf.FloorToInt(_pointerPosition.x);
-                int y = Mathf.FloorToInt(_pointerPosition.z);
-                if (x >= 0 && x < chunk.SizeX && y >= 0 && y < chunk.SizeY)
-                {
-                    TileData tile = chunk.GetTile(x, y);
-                    Vector3[] verts = new Vector3[4];
-                    verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
-                    verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
-                    verts[2] = new Vector3(x + 1f - squareMargin, tile.vertexY[2] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
-                    verts[3] = new Vector3(x + squareMargin, tile.vertexY[3] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
-                    Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
-                    Handles.DrawSolidRectangleWithOutline(verts, Handles.color, Color.cyan);
-                    Handles.zTest = UnityEngine.Rendering.CompareFunction.Greater;
-                    Handles.DrawSolidRectangleWithOutline(verts, Handles.color * 0.3f, Color.cyan);
-                }
+                int x = _pointerData.tileX;
+                int y = _pointerData.tileY;
+                TileData tile = _pointerData.tileData;
+                float squareMargin = tile.active ? 0 : 0.1f;
+                Vector3[] verts = new Vector3[4];
+                verts[0] = new Vector3(x + squareMargin, tile.vertexY[0] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
+                verts[1] = new Vector3(x + 1f - squareMargin, tile.vertexY[1] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + squareMargin);
+                verts[2] = new Vector3(x + 1f - squareMargin, tile.vertexY[2] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
+                verts[3] = new Vector3(x + squareMargin, tile.vertexY[3] * LevelData.STEP_Y + LevelEditor.HANDLES_Z_BIAS, y + 1 - squareMargin);
+
+                Handles.color = new Color(0f, 0.8f, 0.3f, tile.active ? 0.4f : 0.85f);
+                Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+                Handles.DrawSolidRectangleWithOutline(verts, Handles.color, Color.cyan);
+                Handles.zTest = UnityEngine.Rendering.CompareFunction.Greater;
+                Handles.DrawSolidRectangleWithOutline(verts, Handles.color * 0.3f, Color.cyan);
             }
             DrawSelection();
         }
@@ -152,9 +162,10 @@ namespace LevelEditor
                 Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
                 {
-                    _pointerPosition = hit.point;
+                    _pointerData.position = hit.point;
                     _isMultiSelect = true;
-                    UpdateMultiSelect(_multiSelectStartPos, _pointerPosition);
+                    UpdateMultiSelect(_multiSelectStartPos, _pointerData.position);
+                    _pointerData.isHoverTile = false;
                 }
                 view.Repaint();
             }
@@ -162,23 +173,71 @@ namespace LevelEditor
 
         private void HandleMouseMove(SceneView view)
         {
+            ChunkData chunk = _levelData.Chunks[0];
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100, LayerMask.GetMask("Level")))
             {
-                _pointerPosition = hit.point;
-                view.Repaint();
+                _pointerData.position = hit.point;
+                Handles.color = new Color(0f, 1f, 0.8f, 0.3f);
+                int x = Mathf.FloorToInt(_pointerData.position.x);
+                int y = Mathf.FloorToInt(_pointerData.position.z);
+                if (x >= 0 && x < chunk.SizeX && y >= 0 && y < chunk.SizeY)
+                {
+                    _pointerData.isHoverTile = true;
+                    _pointerData.tileX = x;
+                    _pointerData.tileY = y;
+                    _pointerData.tileData = chunk.GetTile(x, y);
+                }
+                else
+                {
+                    _pointerData.isHoverTile = false;
+                }
             }
             else
             {
-                _pointerPosition = Vector3.zero;
+                float minDist = 999999;
+                TileData closestTile = null;
+                int minX = 0;
+                int minY = 0;
+                for (int x = 0; x < chunk.SizeX; x++)
+                {
+                    for (int y = 0; y < chunk.SizeY; y++)
+                    {
+                        if (chunk.GetTile(x, y).active) continue;
+
+                        // TODO: work this matematically to better performance
+                        Vector3 tileCenter = new Vector3(x + 0.5f, chunk.GetTile(x, y).vertexY[0], y + 0.5f);
+                        float t = Vector3.Dot(tileCenter - ray.origin, ray.direction.normalized);
+                        float dist = Vector3.SqrMagnitude((ray.origin + ray.direction.normalized * t) - tileCenter);
+                        if (dist < minDist)
+                        {
+                            minDist = dist;
+                            minX = x;
+                            minY = y;
+                            closestTile = chunk.GetTile(x, y);
+                        }
+                    }
+                }
+                if (closestTile != null)
+                {
+                    _pointerData.isHoverTile = true;
+                    _pointerData.tileX = minX;
+                    _pointerData.tileY = minY;
+                    _pointerData.tileData = closestTile;
+                }
+                else
+                {
+                    _pointerData.isHoverTile = false;
+                }
             }
+            view.Repaint();
         }
 
         private void HandleMouseDown(SceneView view)
         {
             if (Event.current.button == 0)
             {
-                _multiSelectStartPos = _pointerPosition;
+                _multiSelectStartPos = _pointerData.position;
                 _isMultiSelect = false;
                 Event.current.Use();
             }
@@ -190,11 +249,20 @@ namespace LevelEditor
             {
                 if (_isMultiSelect)
                 {
-                    UpdateMultiSelect(_multiSelectStartPos, _pointerPosition);
+                    UpdateMultiSelect(_multiSelectStartPos, _pointerData.position);
                 }
                 else
                 {
-                    SetSelection(_pointerPosition);
+                    if (_pointerData.isHoverTile && !_pointerData.tileData.active)
+                    {
+                        _pointerData.tileData.active = true;
+                        RaiseLevelDataChanged();
+                        view.Repaint();
+                    }
+                    else
+                    {
+                        SetSelection(_pointerData.position); // TODO: old, change for new method
+                    }
                 }
                 Event.current.Use();
             }
@@ -256,8 +324,8 @@ namespace LevelEditor
 
         public void SetSelection(Vector3 pointerPosition)
         {
-            _minPos = new Vector2Int(Mathf.FloorToInt(pointerPosition.x), Mathf.FloorToInt(pointerPosition.z));
-            _maxPos = _minPos;
+            _minSelectionPos = new Vector2Int(Mathf.FloorToInt(pointerPosition.x), Mathf.FloorToInt(pointerPosition.z));
+            _maxSelectionPos = _minSelectionPos;
             isSomethinSelected = true;
         }
 
@@ -270,9 +338,9 @@ namespace LevelEditor
         {
             if (!isSomethinSelected) return;
 
-            for (int x = _minPos.x; x <= _maxPos.x; x++)
+            for (int x = _minSelectionPos.x; x <= _maxSelectionPos.x; x++)
             {
-                for (int y = _minPos.y; y <= _maxPos.y; y++)
+                for (int y = _minSelectionPos.y; y <= _maxSelectionPos.y; y++)
                 {
                     Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
                     Handles.color = new Color(0f, 1f, 0.2f, 0.5f);
@@ -289,10 +357,10 @@ namespace LevelEditor
             Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
             float dotSize = 0.07f;
 
-            Vector3 vert0 = new Vector3(_minPos.x, chunk.GetTile(_minPos).vertexY[0] * LevelData.STEP_Y,              _minPos.y);
-            Vector3 vert1 = new Vector3(_maxPos.x + 1, chunk.GetTile(_maxPos.x, _minPos.y).vertexY[1] * LevelData.STEP_Y, _minPos.y);
-            Vector3 vert2 = new Vector3(_maxPos.x + 1, chunk.GetTile(_maxPos).vertexY[2] * LevelData.STEP_Y             , _maxPos.y + 1);
-            Vector3 vert3 = new Vector3(_minPos.x, chunk.GetTile(_minPos.x, _maxPos.y).vertexY[3] * LevelData.STEP_Y, _maxPos.y + 1);
+            Vector3 vert0 = new Vector3(_minSelectionPos.x, chunk.GetTile(_minSelectionPos).vertexY[0] * LevelData.STEP_Y,              _minSelectionPos.y);
+            Vector3 vert1 = new Vector3(_maxSelectionPos.x + 1, chunk.GetTile(_maxSelectionPos.x, _minSelectionPos.y).vertexY[1] * LevelData.STEP_Y, _minSelectionPos.y);
+            Vector3 vert2 = new Vector3(_maxSelectionPos.x + 1, chunk.GetTile(_maxSelectionPos).vertexY[2] * LevelData.STEP_Y             , _maxSelectionPos.y + 1);
+            Vector3 vert3 = new Vector3(_minSelectionPos.x, chunk.GetTile(_minSelectionPos.x, _maxSelectionPos.y).vertexY[3] * LevelData.STEP_Y, _maxSelectionPos.y + 1);
 
             if (!GetTileBehaviour(0, 0))
                 Handles.DotHandleCap(0, vert0, Quaternion.identity, dotSize, EventType.Repaint);
@@ -316,10 +384,10 @@ namespace LevelEditor
 
         public void UpdateMultiSelect(Vector3 startPointerPos, Vector3 endPointerPosition)
         {
-            _minPos.x = Mathf.FloorToInt(Mathf.Min(startPointerPos.x, endPointerPosition.x));
-            _minPos.y = Mathf.FloorToInt(Mathf.Min(startPointerPos.z, endPointerPosition.z));
-            _maxPos.x = Mathf.FloorToInt(Mathf.Max(startPointerPos.x, endPointerPosition.x));
-            _maxPos.y = Mathf.FloorToInt(Mathf.Max(startPointerPos.z, endPointerPosition.z));
+            _minSelectionPos.x = Mathf.FloorToInt(Mathf.Min(startPointerPos.x, endPointerPosition.x));
+            _minSelectionPos.y = Mathf.FloorToInt(Mathf.Min(startPointerPos.z, endPointerPosition.z));
+            _maxSelectionPos.x = Mathf.FloorToInt(Mathf.Max(startPointerPos.x, endPointerPosition.x));
+            _maxSelectionPos.y = Mathf.FloorToInt(Mathf.Max(startPointerPos.z, endPointerPosition.z));
             isSomethinSelected = true;
         }
 
