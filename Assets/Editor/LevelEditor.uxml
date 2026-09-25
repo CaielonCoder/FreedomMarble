@@ -21,11 +21,26 @@
                     <ui:Toggle label="" name="Top" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                     <ui:Toggle label="" name="TopRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                     <ui:Toggle label="" name="Left" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
-                    <ui:Button text="Face" name="Center" enabled="false" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Button text="Face" name="Center" enabled="false" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px; background-color: rgb(93, 136, 154);"/>
                     <ui:Toggle label="" name="Right" enabled="true" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                     <ui:Toggle label="" name="BottomLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                     <ui:Toggle label="" name="Bottom" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                     <ui:Toggle label="" name="BottomRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:Tab>
+        <ui:Tab label="Edges" name="EdgesTab" style="flex-direction: column;">
+            <ui:VisualElement name="EdgeOperationsContainer" class="container" style="min-height: 250px;">
+                <ui:VisualElement name="BehaviourButtons" style="flex-grow: 1; width: 200px; flex-direction: row; flex-wrap: wrap; height: auto; justify-content: center; align-content: flex-start; max-width: 200px; min-width: 190px; margin-top: 10px;">
+                    <ui:Toggle label="" name="EdgeTopLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="EdgeTop" value="true" enabled="false" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px; background-color: rgb(140, 140, 140);"/>
+                    <ui:Toggle label="" name="EdgeTopRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="EdgeLeft" value="true" enabled="false" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px; background-color: rgb(140, 140, 140);"/>
+                    <ui:Button text="Edge" name="EdgeCenter" enabled="false" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px; background-color: rgb(93, 136, 154);"/>
+                    <ui:Toggle label="" name="EdgeRight" enabled="false" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px; background-color: rgb(140, 140, 140);"/>
+                    <ui:Toggle label="" name="EdgeBottomLeft" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
+                    <ui:Toggle label="" name="EdgeBottom" value="true" enabled="false" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px; background-color: rgb(140, 140, 140);"/>
+                    <ui:Toggle label="" name="EdgeBottomRight" value="true" class="behaviour-button" style="width: 50px; height: 50px; min-width: 50px; min-height: 50px; max-width: 50px; max-height: 50px;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:Tab>

@@ -21,7 +21,7 @@ namespace LevelEditor
         private LevelData _levelData;
 
         private int _currentMode = 0;
-        private LevelEditorMode[] _modes = new LevelEditorMode[3];
+        private LevelEditorMode[] _modes = new LevelEditorMode[4];
 
         [MenuItem("Tools/LevelEditor")]
         public static void ShowLevelEditor()
@@ -37,7 +37,8 @@ namespace LevelEditor
 
             _modes[0] = new LevelEditorChunkMode();
             _modes[1] = new LevelEditorTileMode();
-            _modes[2] = new LevelEditorBlockerMode();
+            _modes[2] = new LevelEditorVertexMode();
+            _modes[3] = new LevelEditorBlockerMode();
 
             foreach (LevelEditorMode editorMode in _modes)
             {
