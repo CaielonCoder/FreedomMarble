@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelBlockerCreator : MonoBehaviour
+public class LevelBlockers : MonoBehaviour
 {
     [SerializeField]
     private LevelData _data;

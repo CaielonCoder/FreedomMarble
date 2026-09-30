@@ -15,8 +15,8 @@ namespace LevelEditor
         private Button _enabledButton;
 
         private bool _editionEnabled = false;
-        private LevelMeshCreator _levelRenderer;
-        private LevelBlockerCreator _levelBlockers;
+        private LevelRenderer _levelRenderer;
+        private LevelBlockers _levelBlockers;
         private MeshCollider _levelCollider;
         private LevelData _levelData;
 
@@ -59,8 +59,8 @@ namespace LevelEditor
             if (!_editionEnabled)
             {
                 _rootTabView.visible = true;
-                _levelRenderer = FindAnyObjectByType<LevelMeshCreator>();
-                _levelBlockers = FindAnyObjectByType<LevelBlockerCreator>();
+                _levelRenderer = FindAnyObjectByType<LevelRenderer>();
+                _levelBlockers = FindAnyObjectByType<LevelBlockers>();
                 if (_levelRenderer == null || _levelBlockers == null)
                 {
                     EditorUtility.DisplayDialog("Level Error", _levelRenderer ? "LevelBlockerCreator not found" : "LevelMeshCreator not found", "OK");

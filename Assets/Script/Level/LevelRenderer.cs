@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelMeshCreator : MonoBehaviour
+public class LevelRenderer : MonoBehaviour
 {
     [SerializeField]
     private LevelData _data;
@@ -22,49 +22,9 @@ public class LevelMeshCreator : MonoBehaviour
 
     private void CreateFloorMesh()
     {
-        ChunkData chunk = _data.Chunks[0];
-        int vertexCount = chunk.SizeX * chunk.SizeY * 4;
-        List<Vector3> vertices = new List<Vector3>();
-        List<Vector3> normals = new List<Vector3>();
-        List<int> triangles = new List<int>();
-
-        Vector2Int chunkSize = new Vector2Int(chunk.SizeX, chunk.SizeY);
-
-        for (int x = 0; x < chunkSize.x; x++)
-        {
-            for (int y = 0; y < chunkSize.y; y++)
-            {
-                if (!chunk.GetTile(x, y).active) continue;
-
-                int vertexIndex = vertices.Count;
-
-                vertices.Add(new Vector3(x, chunk.GetTile(x, y).vertexY[0] * LevelData.STEP_Y, y));
-                normals.Add(Vector3.up);
-
-                vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[1] * LevelData.STEP_Y, y));
-                normals.Add(Vector3.up);
-
-                vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[2] * LevelData.STEP_Y, y + 1));
-                normals.Add(Vector3.up);
-
-                vertices.Add(new Vector3(x, chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y, y + 1));
-                normals.Add(Vector3.up);
-
-                triangles.Add(vertexIndex);
-                triangles.Add(vertexIndex + 2);
-                triangles.Add(vertexIndex + 1);
-                triangles.Add(vertexIndex);
-                triangles.Add(vertexIndex + 3);
-                triangles.Add(vertexIndex + 2);
-            }
-        }
-
         if (!_floorMesh) _floorMesh = new Mesh();
         _floorMesh.triangles = null;
-        _floorMesh.vertices = vertices.ToArray();
-        _floorMesh.normals = normals.ToArray();
-        _floorMesh.triangles = triangles.ToArray();
-
+        LevelMeshUtils.AddFloorMesh(_floorMesh, _data);
         _floorMeshFilter.mesh = _floorMesh;
     }
 
@@ -190,6 +150,16 @@ public class LevelMeshCreator : MonoBehaviour
 
     public void OnDataUpdated()
     {
+        if (!_floorMesh)
+        {
+            _floorMesh = new Mesh();
+        }
+        else
+        {
+            _floorMesh.triangles = new int[0];
+            _floorMesh.vertices = new Vector3[0];
+            _floorMesh.normals = new Vector3[0];
+        }
         CreateFloorMesh();
         CreateWallMesh();
     }
