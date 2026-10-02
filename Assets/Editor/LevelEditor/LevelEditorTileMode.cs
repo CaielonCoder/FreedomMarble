@@ -133,6 +133,20 @@ namespace LevelEditor
 
         private void HandleRepaint()
         {
+
+            for (int x = 0; x < _levelData.Chunks[0].SizeX; x++)
+            {
+                for (int y = 0; y < _levelData.Chunks[0].SizeY; y++)
+                {
+                    if (!_levelData.Chunks[0].GetTile(x, y).active)
+                    {
+                        Vector3 tileCenter = new Vector3(x + 0.5f, _levelData.Chunks[0].GetTile(x, y).vertexY[0] * LevelData.STEP_Y, y + 0.5f);
+                        Handles.color = Color.yellow;
+                        Handles.DotHandleCap(0, tileCenter, Quaternion.identity, 0.02f, EventType.Repaint);
+                    }
+                }
+            }
+
             if (_pointerData.isHoverTile)
             {
 
@@ -206,7 +220,7 @@ namespace LevelEditor
                         if (chunk.GetTile(x, y).active) continue;
 
                         // TODO: work this matematically to better performance
-                        Vector3 tileCenter = new Vector3(x + 0.5f, chunk.GetTile(x, y).vertexY[0], y + 0.5f);
+                        Vector3 tileCenter = new Vector3(x + 0.5f, chunk.GetTile(x, y).vertexY[0] * LevelData.STEP_Y, y + 0.5f);
                         float t = Vector3.Dot(tileCenter - ray.origin, ray.direction.normalized);
                         float dist = Vector3.SqrMagnitude((ray.origin + ray.direction.normalized * t) - tileCenter);
                         if (dist < minDist)

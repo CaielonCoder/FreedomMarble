@@ -3,14 +3,14 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    private float distance;
+    private float _distance;
     [SerializeField]
-    private float angle;
+    private float _angle;
     [SerializeField]
-    private Vector3 direction;
+    private Vector3 _direction;
 
     [SerializeField]
-    private MarbleMovementController marbleController;
+    private MarbleMovementController _marbleController;
 
     private enum State
     {
@@ -21,12 +21,12 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        marbleController.FallOutside += OnMarbleFallOutside;
-        marbleController.Respawn += OnMarbleRespawn;
+        _marbleController.FallOutside += OnMarbleFallOutside;
+        _marbleController.Respawn += OnMarbleRespawn;
 
-        direction.Normalize();
-        direction.y = Mathf.Sin(Mathf.Deg2Rad * angle);
-        direction.Normalize();
+        _direction.Normalize();
+        _direction.y = Mathf.Sin(Mathf.Deg2Rad * _angle);
+        _direction.Normalize();
     }
 
     void Update()
@@ -40,17 +40,12 @@ public class CameraController : MonoBehaviour
     public void UpdateCameraPosition()
     {
 #if UNITY_EDITOR
-        direction.Normalize();
-        direction.y = Mathf.Sin(Mathf.Deg2Rad * angle);
-        direction.Normalize();
+        _direction.Normalize();
+        _direction.y = Mathf.Sin(Mathf.Deg2Rad * _angle);
+        _direction.Normalize();
 #endif
-            Vector3 moveDirection = direction;
-            moveDirection.y = 0;
-            moveDirection.Normalize();
-            Vector3 position = Vector3.Dot(marbleController.transform.position, moveDirection) * moveDirection;
-            position.y = marbleController.transform.position.y;
-            transform.position = position + direction * distance;
-            transform.forward = -direction;
+        transform.position = _marbleController.transform.position + _direction * _distance;
+        transform.forward = -_direction;
     }
 
     protected void OnMarbleFallOutside()

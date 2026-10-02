@@ -29,7 +29,7 @@ public class GameStateManager : MonoBehaviour
     public void StartGame()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene("Practice");
+        SceneManager.LoadScene("Level1");
     }
 
     private IEnumerator UpdateTimer()

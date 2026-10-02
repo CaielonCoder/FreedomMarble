@@ -33,7 +33,7 @@ namespace LevelEditor
             _addButton.clicked += OnAddButtonClicked;
             _removeButton.clicked += OnRemoveButtonClicked;
 
-            _selectedBlockerMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Editor/BlockerSelectedMaterial.mat");
+            _selectedBlockerMat = AssetDatabase.LoadAssetAtPath<Material>("Assets/Editor/LevelEditor/BlockerSelectedMaterial.mat");
         }
 
         public override void Enter(LevelData levelData)
