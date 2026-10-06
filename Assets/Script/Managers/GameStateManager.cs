@@ -52,6 +52,11 @@ public class GameStateManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
     {
+        InitLevel();
+    }
+
+    public void InitLevel()
+    {
         _state = LevelState.Intro;
         TimeLeft = 60;
         LevelStateChanged?.Invoke(_state);
