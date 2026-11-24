@@ -43,6 +43,13 @@ public class InGameUIController : MonoBehaviour
     {
         switch (state)
         {
+            case GameStateManager.LevelState.Playing:
+                if (_levelStartPanel.isActiveAndEnabled)
+                {
+                    StopAllCoroutines();
+                    StartLevel();
+                }
+                break;
             case GameStateManager.LevelState.Outro:
                 StartCoroutine(LevelCompleteAnimation()); 
                 break;
@@ -72,7 +79,7 @@ public class InGameUIController : MonoBehaviour
         float animationTime = 0;
         while (animationTime < 1)
         {
-            startTime.text = (_gameStateManager.TimeLeft * (1-animationTime)).ToString("F0");
+            startTime.text = (_gameStateManager.TimeLeft * (1 - animationTime)).ToString("F0");
             _timeLabel.text = (_gameStateManager.TimeLeft * animationTime).ToString("F0");
             yield return null;
             animationTime += Time.unscaledDeltaTime;
@@ -82,6 +89,12 @@ public class InGameUIController : MonoBehaviour
         startTime.text = "0";
         yield return new WaitForSecondsRealtime(2f);
 
+        StartLevel();
+    }
+
+
+    private void StartLevel()
+    {
         Time.timeScale = 1;
         _levelStartPanel.gameObject.SetActive(false);
         enabled = true;

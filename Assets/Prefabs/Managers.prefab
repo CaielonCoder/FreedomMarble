@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6015677755910741739}
   - component: {fileID: 8156375020849340997}
+  - component: {fileID: 8238041135126643365}
   - component: {fileID: 8085999267985069461}
-  - component: {fileID: 6702786887871012550}
   - component: {fileID: 1843088631761123136}
   m_Layer: 0
   m_Name: Managers
@@ -47,6 +47,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c632b3a7d438bd74b8cbae8eab0dfac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Provider
+--- !u!114 &8238041135126643365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17846b3c0ba6f94ebf74edbb4b74857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefaultGameStateManager
 --- !u!114 &8085999267985069461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,18 +71,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd130e3dbbb41034588d62ed6c6241d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
---- !u!114 &6702786887871012550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3708085191869199205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c4b4b81eceaa64b92c9dc159c8b6ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameStateManager
 --- !u!114 &1843088631761123136
 MonoBehaviour:
   m_ObjectHideFlags: 0

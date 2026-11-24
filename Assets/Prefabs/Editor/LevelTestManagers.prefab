@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3708085191869199205
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6015677755910741739}
+  - component: {fileID: 8156375020849340997}
+  - component: {fileID: 5857802273220929141}
+  - component: {fileID: 8085999267985069461}
+  - component: {fileID: 1843088631761123136}
+  m_Layer: 0
+  m_Name: LevelTestManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6015677755910741739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.58173, y: -11.81507, z: -0.38306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8156375020849340997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c632b3a7d438bd74b8cbae8eab0dfac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Provider
+--- !u!114 &5857802273220929141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76087f4fd13336043b9678ebd7307e27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelTestGameStateManager
+--- !u!114 &8085999267985069461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd130e3dbbb41034588d62ed6c6241d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
+--- !u!114 &1843088631761123136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708085191869199205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67b5179776c46449b8da9e29c6b348b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  _audioClips:
+  - name: MainMenuMusic
+    clip: {fileID: 8300000, guid: e4e8eb2550fd3d443aac9f899fae13df, type: 3}
+    volume: 0.8
+  - name: GameplayMusic
+    clip: {fileID: 8300000, guid: 8859c3271b3c62042bb29474eec5e031, type: 3}
+    volume: 0.3
+  - name: Click
+    clip: {fileID: 8300000, guid: 0af910a90bb3f514684cd37706ccef47, type: 3}
+    volume: 1
+  - name: LevelComplete
+    clip: {fileID: 8300000, guid: ae228bda4b1f8794c8acebbbb9cf6d77, type: 3}
+    volume: 1
+  - name: TimeOver
+    clip: {fileID: 8300000, guid: 53196484a103d3f47ba194aea51505e8, type: 3}
+    volume: 1
+  - name: Fall
+    clip: {fileID: 8300000, guid: 484b210d45b87a043b70ede1eb53e60c, type: 3}
+    volume: 0.6
+  - name: Collision
+    clip: {fileID: 8300000, guid: 4fce2717235497c49831172519156b85, type: 3}
+    volume: 0.9
