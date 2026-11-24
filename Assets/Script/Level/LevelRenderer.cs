@@ -32,29 +32,31 @@ public class LevelRenderer : MonoBehaviour
     {
         ChunkData chunk = _data.Chunks[0];
         List<Vector3> vertices = new List<Vector3>();
+        List<Vector3> normals = new List<Vector3>();
         List<int> triangles = new List<int>();
 
         for (int x = 0; x < chunk.SizeX; x++)
         {
             for (int y = 0; y < chunk.SizeY; y++)
             {
-                CreateFrontWall(x, y, chunk, vertices, triangles);
-                CreateRightWall(x, y, chunk, vertices, triangles);
+                CreateFrontWall(x, y, chunk, vertices, normals, triangles);
+                CreateRightWall(x, y, chunk, vertices, normals, triangles);
             }
         }
 
         if (!_wallMesh) _wallMesh = new Mesh();
         _wallMesh.triangles = null;
         _wallMesh.vertices = vertices.ToArray();
+        _wallMesh.normals = normals.ToArray();
         _wallMesh.triangles = triangles.ToArray();
 
         _wallMesh.RecalculateBounds();
-        _wallMesh.RecalculateNormals();
+        //_wallMesh.RecalculateNormals();
 
         _wallMeshFilter.mesh = _wallMesh;
     }
 
-    private void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
+    private void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector3> normals, List<int> triangles)
     {
         if (!chunk.GetTile(x, y).active) return;
 
@@ -82,6 +84,10 @@ public class LevelRenderer : MonoBehaviour
             vertices.Add(new Vector3(x,     chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y,      y + 1));
             vertices.Add(new Vector3(x,     (chunk.GetTile(x, y).vertexY[3] - delta2) * LevelData.STEP_Y, y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[2] - delta1) * LevelData.STEP_Y, y + 1));
+            normals.Add(Vector3.forward);
+            normals.Add(Vector3.forward);
+            normals.Add(Vector3.forward);
+            normals.Add(Vector3.forward);
 
             if (delta1 > 0)
             {
@@ -98,7 +104,7 @@ public class LevelRenderer : MonoBehaviour
         }
     }
 
-    private void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
+    private void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector3> normals, List<int> triangles)
     {
         if (!chunk.GetTile(x, y).active) return;
 
@@ -126,6 +132,11 @@ public class LevelRenderer : MonoBehaviour
             vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[2] * LevelData.STEP_Y,      y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[2] - delta2) * LevelData.STEP_Y, y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[1] - delta1) * LevelData.STEP_Y, y));
+            normals.Add(Vector3.right);
+            normals.Add(Vector3.right);
+            normals.Add(Vector3.right);
+            normals.Add(Vector3.right);
+
             if (delta1 > 0)
             {
                 triangles.Add(startIndex);

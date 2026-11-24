@@ -345,7 +345,247 @@ MonoBehaviour:
       vertexY: 02000000020000000200000002000000
     - active: 0
       vertexY: 02000000020000000200000002000000
-    _sizeX: 11
+    - active: 1
+      vertexY: 00000000ffffffffffffffff00000000
+    - active: 1
+      vertexY: 00000000ffffffffffffffff00000000
+    - active: 1
+      vertexY: 00000000ffffffffffffffff00000000
+    - active: 0
+      vertexY: 00000000ffffffff0000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 0000000000000000f4fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff4fffffff4fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff4fffffff4fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff4fffffff4fffffff4ffffff
+    - active: 0
+      vertexY: f4fffffff4ffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 1
+      vertexY: fffffffffefffffffeffffffffffffff
+    - active: 1
+      vertexY: fffffffffefffffffeffffffffffffff
+    - active: 1
+      vertexY: fffffffffefffffffeffffffffffffff
+    - active: 0
+      vertexY: fffffffffeffffff0000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 0000000000000000f4fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff4fffffff4fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff4fffffff4fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff4fffffff4fffffff4ffffff
+    - active: 0
+      vertexY: f4fffffff4ffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 1
+      vertexY: fefffffffdfffffffdfffffffeffffff
+    - active: 1
+      vertexY: fefffffffdfffffffdfffffffeffffff
+    - active: 1
+      vertexY: fefffffffdfffffffdfffffffeffffff
+    - active: 0
+      vertexY: fefffffffdffffff0000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 00000000000000000000000000000000
+    - active: 0
+      vertexY: 0000000000000000f6fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff6fffffff6fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff6fffffff6fffffff4ffffff
+    - active: 1
+      vertexY: f4fffffff6fffffff6fffffff4ffffff
+    - active: 0
+      vertexY: f4fffffff6ffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 1
+      vertexY: fdfffffffcfffffffcfffffffdffffff
+    - active: 1
+      vertexY: fdfffffffcfffffffcfffffffdffffff
+    - active: 1
+      vertexY: fdfffffffcfffffffcfffffffdffffff
+    - active: 0
+      vertexY: fdfffffffcfffffffbffffff00000000
+    - active: 0
+      vertexY: 00000000fbfffffffaffffff00000000
+    - active: 0
+      vertexY: 00000000fafffffff9ffffff00000000
+    - active: 0
+      vertexY: 00000000f9fffffff8ffffff00000000
+    - active: 0
+      vertexY: 00000000f8fffffff8fffffff6ffffff
+    - active: 1
+      vertexY: f6fffffff8fffffff8fffffff6ffffff
+    - active: 1
+      vertexY: f6fffffff8fffffff8fffffff6ffffff
+    - active: 1
+      vertexY: f6fffffff8fffffff8fffffff6ffffff
+    - active: 0
+      vertexY: f6fffffff8ffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 1
+      vertexY: fcfffffffcfffffffcfffffffcffffff
+    - active: 1
+      vertexY: fcfffffffcfffffffcfffffffcffffff
+    - active: 1
+      vertexY: fcfffffffcfffffffcfffffffcffffff
+    - active: 1
+      vertexY: fcfffffffcfffffffbfffffffbffffff
+    - active: 1
+      vertexY: fbfffffffbfffffffafffffffaffffff
+    - active: 1
+      vertexY: fafffffffafffffff9fffffff9ffffff
+    - active: 1
+      vertexY: f9fffffff9fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 0
+      vertexY: f8fffffff8ffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 1
+      vertexY: fcfffffffcfffffffcfffffffcffffff
+    - active: 1
+      vertexY: fcfffffffcfffffffcfffffffcffffff
+    - active: 1
+      vertexY: fcfffffffcfffffffcfffffffcffffff
+    - active: 1
+      vertexY: fcfffffffcfffffffbfffffffbffffff
+    - active: 1
+      vertexY: fbfffffffbfffffffafffffffaffffff
+    - active: 1
+      vertexY: fafffffffafffffff9fffffff9ffffff
+    - active: 1
+      vertexY: f9fffffff9fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 1
+      vertexY: f8fffffff8fffffff8fffffff8ffffff
+    - active: 0
+      vertexY: f8fffffff8ffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 1
+      vertexY: fcfffffffefffffffefffffffcffffff
+    - active: 1
+      vertexY: fcfffffffefffffffefffffffcffffff
+    - active: 1
+      vertexY: fcfffffffefffffffefffffffcffffff
+    - active: 1
+      vertexY: fcfffffffefffffffdfffffffbffffff
+    - active: 1
+      vertexY: fbfffffffdfffffffcfffffffaffffff
+    - active: 1
+      vertexY: fafffffffcfffffffbfffffff9ffffff
+    - active: 1
+      vertexY: f9fffffffbfffffffafffffff8ffffff
+    - active: 1
+      vertexY: f8fffffffafffffffafffffff8ffffff
+    - active: 1
+      vertexY: f8fffffffafffffffafffffff8ffffff
+    - active: 1
+      vertexY: f8fffffffafffffffafffffff8ffffff
+    - active: 1
+      vertexY: f8fffffffafffffffafffffff8ffffff
+    - active: 0
+      vertexY: f8fffffffaffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: fefffffffefffffffefffffffeffffff
+    - active: 0
+      vertexY: fefffffffefffffffefffffffeffffff
+    - active: 0
+      vertexY: fefffffffefffffffefffffffeffffff
+    - active: 0
+      vertexY: fefffffffefffffffdfffffffdffffff
+    - active: 0
+      vertexY: fdfffffffdfffffffcfffffffcffffff
+    - active: 0
+      vertexY: fcfffffffcfffffffbfffffffbffffff
+    - active: 0
+      vertexY: fbfffffffbfffffffafffffffaffffff
+    - active: 0
+      vertexY: fafffffffafffffffafffffffaffffff
+    - active: 0
+      vertexY: fafffffffafffffffafffffffaffffff
+    - active: 0
+      vertexY: fafffffffafffffffafffffffaffffff
+    - active: 0
+      vertexY: fafffffffafffffffafffffffaffffff
+    - active: 0
+      vertexY: fafffffffaffffff0200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    - active: 0
+      vertexY: 02000000020000000200000002000000
+    _sizeX: 19
     _sizeY: 15
     _blockers:
     - StartPos: {x: 3.9, y: 4.1}

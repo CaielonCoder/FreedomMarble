@@ -157,8 +157,11 @@ public class MarbleMovementController : MonoBehaviour
         float angle = Vector3.Angle(changeDelta, _rigidbody.linearVelocity);
 
         Vector3 forceDelta = moveDirection * _forceMultiplier * (1 + (angle / 360f) * _changeAngleMultiplier);
-        string boxStr = $"clamped lin vel {clampedLinearVel:0.00}\nchange delta {changeDelta:0.00}\n";
-        boxStr += $"angle {angle:0.00}\nforce delta {forceDelta:0.00}";
+        string boxStr = $"lin vel {_rigidbody.linearVelocity.magnitude:0.00} - {_rigidbody.linearVelocity:0.00}\n";
+        boxStr += $"clamped lin vel {clampedLinearVel.magnitude:0.00} - {clampedLinearVel:0.00}\n";
+        boxStr += $"change delta {changeDelta.magnitude:0.00} - {changeDelta:0.00}\n";
+        boxStr += $"angle {angle:0.00}\n";
+        boxStr += $"force delta {forceDelta.magnitude:0.00} - {forceDelta:0.00}";
         GUI.Box(new Rect(Screen.width - 200, 0, 200, 200), boxStr);
     }
 #endif

@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MarbelMovementController
   _marbleInputActionAsset: {fileID: -944628639613478452, guid: 5d49dc063a074fe438e7750f83c812bc, type: 3}
   _forceMultiplier: 0
-  _torqueMultiplier: 4
+  _torqueMultiplier: 15
   _maxSpeed: 2
   _changeAngleMultiplier: 1.5
   _playerCamera: {fileID: 0}
