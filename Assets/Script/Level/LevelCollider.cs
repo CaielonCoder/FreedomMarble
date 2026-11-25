@@ -26,6 +26,9 @@ public class LevelCollider : MonoBehaviour
                 Mesh mesh = new Mesh();
                 LevelMeshUtils.AddFloorMesh(mesh, _levelData, x, y, x + 5, y + 5);
                 col.AddComponent<MeshCollider>().sharedMesh = mesh;
+                mesh = new Mesh();
+                LevelMeshUtils.AddWallMesh(mesh, _levelData, x, y, x + 5, y + 5, LevelMeshUtils.WALL_ALL_FLAG);
+                col.AddComponent<MeshCollider>().sharedMesh = mesh;
             }
         }
     }

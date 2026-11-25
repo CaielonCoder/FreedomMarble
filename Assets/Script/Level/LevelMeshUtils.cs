@@ -51,13 +51,15 @@ public class LevelMeshUtils
     public const byte WALL_RIGHT_FLAG = 0x02;
     public const byte WALL_BACK_FLAG  = 0x04;
     public const byte WALL_LEFT_FLAG  = 0x08;
+    public const byte WALL_ALL_FLAG = WALL_FRONT_FLAG | WALL_LEFT_FLAG | WALL_BACK_FLAG | WALL_RIGHT_FLAG;
 
     public static void AddWallMesh(Mesh mesh, LevelData data, int startX = 0, int startY = 0, int endX = int.MaxValue, int endY = int.MaxValue, 
         byte flags = WALL_FRONT_FLAG | WALL_RIGHT_FLAG)
     {
         ChunkData chunk = data.Chunks[0];
-        List<Vector3> vertices = new List<Vector3>();
-        List<int> triangles = new List<int>();
+        List<Vector3> vertices = new List<Vector3>(mesh.vertices);
+        List<Vector3> normals = new List<Vector3>(mesh.normals);
+        List<int> triangles = new List<int>(mesh.triangles);
 
         if (endX > chunk.SizeX) endX = chunk.SizeX;
         if (endY > chunk.SizeY) endY = chunk.SizeY;
@@ -66,8 +68,10 @@ public class LevelMeshUtils
         {
             for (int y = startY; y < endY; y++)
             {
-                if ((flags & WALL_FRONT_FLAG) != 0) CreateFrontWall(x, y, chunk, vertices, triangles);
-                if ((flags & WALL_RIGHT_FLAG) != 0) CreateRightWall(x, y, chunk, vertices, triangles);
+                if ((flags & WALL_FRONT_FLAG) != 0) CreateFrontWall(x, y, chunk, vertices, normals, triangles);
+                if ((flags & WALL_RIGHT_FLAG) != 0) CreateRightWall(x, y, chunk, vertices, normals, triangles);
+                if ((flags & WALL_BACK_FLAG) != 0) CreateBackWall(x, y, chunk, vertices, normals, triangles);
+                if ((flags & WALL_LEFT_FLAG) != 0) CreateLeftWall(x, y, chunk, vertices, normals, triangles);
             }
         }
 
@@ -78,7 +82,7 @@ public class LevelMeshUtils
         mesh.RecalculateNormals();
     }
 
-    private static void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
+    private static void CreateFrontWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector3> normals, List<int> triangles)
     {
         if (!chunk.GetTile(x, y).active) return;
 
@@ -106,6 +110,10 @@ public class LevelMeshUtils
             vertices.Add(new Vector3(x,     chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y,      y + 1));
             vertices.Add(new Vector3(x,     (chunk.GetTile(x, y).vertexY[3] - delta2) * LevelData.STEP_Y, y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[2] - delta1) * LevelData.STEP_Y, y + 1));
+            normals.Add(Vector3.forward);
+            normals.Add(Vector3.forward);
+            normals.Add(Vector3.forward);
+            normals.Add(Vector3.forward);
 
             if (delta1 > 0)
             {
@@ -122,7 +130,7 @@ public class LevelMeshUtils
         }
     }
 
-    private static void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<int> triangles)
+    private static void CreateRightWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector3> normals, List<int> triangles)
     {
         if (!chunk.GetTile(x, y).active) return;
 
@@ -150,6 +158,11 @@ public class LevelMeshUtils
             vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[2] * LevelData.STEP_Y,      y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[2] - delta2) * LevelData.STEP_Y, y + 1));
             vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[1] - delta1) * LevelData.STEP_Y, y));
+            normals.Add(Vector3.right);
+            normals.Add(Vector3.right);
+            normals.Add(Vector3.right);
+            normals.Add(Vector3.right);
+
             if (delta1 > 0)
             {
                 triangles.Add(startIndex);
@@ -161,6 +174,101 @@ public class LevelMeshUtils
                 triangles.Add(startIndex + 1);
                 triangles.Add(startIndex + 2);
                 triangles.Add(startIndex + 3);
+            }
+        }
+    }
+    private static void CreateBackWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector3> normals, List<int> triangles)
+    {
+        if (!chunk.GetTile(x, y).active) return;
+
+        int delta1;
+        int delta2;
+
+        if (y > 0 && chunk.GetTile(x, y - 1).active)
+        {
+            delta1 = chunk.GetTile(x, y).vertexY[1] - chunk.GetTile(x, y - 1).vertexY[2];
+            delta2 = chunk.GetTile(x, y).vertexY[0] - chunk.GetTile(x, y - 1).vertexY[3];
+        }
+        else
+        {
+            delta1 = 20;
+            delta2 = 20;
+        }
+
+        if (delta1 > 0 || delta2 > 0)
+        {
+            if (delta1 < 0) delta1 = 0;
+            if (delta2 < 0) delta2 = 0;
+
+            int startIndex = vertices.Count;
+            vertices.Add(new Vector3(x + 1, chunk.GetTile(x, y).vertexY[1] * LevelData.STEP_Y,      y));
+            vertices.Add(new Vector3(x,     chunk.GetTile(x, y).vertexY[0] * LevelData.STEP_Y,      y));
+            vertices.Add(new Vector3(x,     (chunk.GetTile(x, y).vertexY[0] - delta2) * LevelData.STEP_Y, y));
+            vertices.Add(new Vector3(x + 1, (chunk.GetTile(x, y).vertexY[1] - delta1) * LevelData.STEP_Y, y));
+            normals.Add(Vector3.back);
+            normals.Add(Vector3.back);
+            normals.Add(Vector3.back);
+            normals.Add(Vector3.back);
+
+            if (delta1 > 0)
+            {
+                triangles.Add(startIndex + 3);
+                triangles.Add(startIndex + 1);
+                triangles.Add(startIndex);
+            }
+            if (delta2 > 0)
+            {
+                triangles.Add(startIndex + 3);
+                triangles.Add(startIndex + 2);
+                triangles.Add(startIndex + 1);
+            }
+        }
+    }
+
+    private static void CreateLeftWall(int x, int y, ChunkData chunk, List<Vector3> vertices, List<Vector3> normals, List<int> triangles)
+    {
+        if (!chunk.GetTile(x, y).active) return;
+
+        int delta1;
+        int delta2;
+
+        if (x > 0 && chunk.GetTile(x - 1, y).active)
+        {
+            delta1 = chunk.GetTile(x, y).vertexY[0] - chunk.GetTile(x - 1, y).vertexY[1];
+            delta2 = chunk.GetTile(x, y).vertexY[3] - chunk.GetTile(x - 1, y).vertexY[2];
+        }
+        else
+        {
+            delta1 = 20;
+            delta2 = 20;
+        }
+
+        if (delta1 > 0 || delta2 > 0)
+        {
+            if (delta1 < 0) delta1 = 0;
+            if (delta2 < 0) delta2 = 0;
+
+            int startIndex = vertices.Count;
+            vertices.Add(new Vector3(x, chunk.GetTile(x, y).vertexY[0] * LevelData.STEP_Y,      y));
+            vertices.Add(new Vector3(x, chunk.GetTile(x, y).vertexY[3] * LevelData.STEP_Y,      y + 1));
+            vertices.Add(new Vector3(x, (chunk.GetTile(x, y).vertexY[3] - delta2) * LevelData.STEP_Y, y + 1));
+            vertices.Add(new Vector3(x, (chunk.GetTile(x, y).vertexY[0] - delta1) * LevelData.STEP_Y, y));
+            normals.Add(Vector3.left);
+            normals.Add(Vector3.left);
+            normals.Add(Vector3.left);
+            normals.Add(Vector3.left);
+
+            if (delta1 > 0)
+            {
+                triangles.Add(startIndex + 3);
+                triangles.Add(startIndex + 1);
+                triangles.Add(startIndex);
+            }
+            if (delta2 > 0)
+            {
+                triangles.Add(startIndex + 3);
+                triangles.Add(startIndex + 2);
+                triangles.Add(startIndex + 1);
             }
         }
     }
